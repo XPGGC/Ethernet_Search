@@ -32,6 +32,15 @@ namespace Ethernet_Search
         private ConnectionMode currentConnectionMode = ConnectionMode.None;
         private string targetDeviceIP = "";  // 目标设备IP（网卡模式）
         private string currentComPort = "";   // 当前COM口（串口模式）
+        private string menuID = "1";
+
+        // COM配置参数
+        private int comBaudRate = 9600;
+        private int comDataBits = 8;
+        private StopBits comStopBits = StopBits.One;
+        private Parity comParity = Parity.None;
+        private int comReadTimeout = 3000;
+        private int comWriteTimeout = 3000;
 
         public Form1()
         {
@@ -41,6 +50,68 @@ namespace Ethernet_Search
         {
             Form1Search_Load();
             GetPort(null, null);
+            InitializeComConfigPanel();
+            MenuVisual(); // 初始化界面显示
+        }
+
+        // 初始化COM配置界面
+        private void InitializeComConfigPanel()
+        {
+            if (panelComConfig == null)
+            {
+                CreateComConfigPanel();
+            }
+            LoadComConfigToUI(); // 加载当前配置到界面
+        }
+
+        private void MenuVisual()
+        {
+            if (menuID == "1")
+            {
+                // 显示主界面
+                ShowMainInterface();
+            }
+            else if (menuID == "2")
+            {
+                // 显示COM配置界面
+                ShowComConfigInterface();
+            }
+        }
+
+        // 显示主界面
+        private void ShowMainInterface()
+        {
+            // 隐藏COM配置界面
+            if (panelComConfig != null)
+                panelComConfig.Visible = false;
+            
+            // 显示主界面控件
+            if (uiGroupBox1 != null)
+                uiGroupBox1.Visible = true;
+            if (groupBox2 != null)
+                groupBox2.Visible = true;
+            if (groupBox3 != null)
+                groupBox3.Visible = true;
+            if (uiLabel1 != null)
+                uiLabel1.Visible = true;
+        }
+
+        // 显示COM配置界面
+        private void ShowComConfigInterface()
+        {
+            // 隐藏主界面控件
+            if (uiGroupBox1 != null)
+                uiGroupBox1.Visible = false;
+            if (groupBox2 != null)
+                groupBox2.Visible = false;
+            if (groupBox3 != null)
+                groupBox3.Visible = false;
+            if (uiLabel1 != null)
+                uiLabel1.Visible = false;
+            
+            // 显示COM配置界面
+            if (panelComConfig != null)
+                panelComConfig.Visible = true;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -193,14 +264,14 @@ namespace Ethernet_Search
                     serialPort_COM.Dispose();
                 }
 
-                // 创建并配置串口
+                // 创建并配置串口（使用保存的配置参数）
                 serialPort_COM = new SerialPort(comPort);
-                serialPort_COM.BaudRate = 9600;  // 默认波特率，可根据实际设备调整
-                serialPort_COM.DataBits = 8;
-                serialPort_COM.StopBits = StopBits.One;
-                serialPort_COM.Parity = Parity.None;
-                serialPort_COM.ReadTimeout = 3000;
-                serialPort_COM.WriteTimeout = 3000;
+                serialPort_COM.BaudRate = comBaudRate;
+                serialPort_COM.DataBits = comDataBits;
+                serialPort_COM.StopBits = comStopBits;
+                serialPort_COM.Parity = comParity;
+                serialPort_COM.ReadTimeout = comReadTimeout;
+                serialPort_COM.WriteTimeout = comWriteTimeout;
                 serialPort_COM.Encoding = Encoding.UTF8;
 
                 // 打开串口
@@ -704,16 +775,6 @@ namespace Ethernet_Search
             {
                 throw new Exception("串口发送失败：" + ex.Message);
             }
-        }
-
-        private void bindingSource1_CurrentChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }
