@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ethernet_Search", "Ethernet_Search\Ethernet_Search.csproj", "{2B091842-4260-43F0-8613-5D894E3B491B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B091842-4260-43F0-8613-5D894E3B491B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B091842-4260-43F0-8613-5D894E3B491B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B091842-4260-43F0-8613-5D894E3B491B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B091842-4260-43F0-8613-5D894E3B491B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58A9D2A8-FFE3-4209-87DF-D2CD267EFAAC}
+	EndGlobalSection
+EndGlobal
