@@ -88,8 +88,8 @@
             this.button4 = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.uiButton3 = new Sunny.UI.UIButton();
             this.uiButton5 = new Sunny.UI.UIButton();
+            this.uiButton3 = new Sunny.UI.UIButton();
             this.uiGroupBox1.SuspendLayout();
             this.uiCheckBoxGroup1.SuspendLayout();
             this.uiCheckBoxGroup6.SuspendLayout();
@@ -278,6 +278,7 @@
             // 
             // uiGroupBox1
             // 
+            this.uiGroupBox1.Controls.Add(this.uiButton3);
             this.uiGroupBox1.Controls.Add(this.uiCheckBoxGroup1);
             this.uiGroupBox1.Controls.Add(this.uiCheckBoxGroup6);
             this.uiGroupBox1.Controls.Add(this.uiDataGridView1);
@@ -752,7 +753,6 @@
             // 
             // flowLayoutPanel2
             // 
-            this.flowLayoutPanel2.Controls.Add(this.uiButton3);
             this.flowLayoutPanel2.Controls.Add(this.uiButton5);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
@@ -760,28 +760,12 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(118, 717);
             this.flowLayoutPanel2.TabIndex = 1;
             // 
-            // uiButton3
-            // 
-            this.uiButton3.BackColor = System.Drawing.Color.White;
-            this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton3.Location = new System.Drawing.Point(0, 0);
-            this.uiButton3.Margin = new System.Windows.Forms.Padding(0);
-            this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton3.Name = "uiButton3";
-            this.uiButton3.Radius = 1;
-            this.uiButton3.Size = new System.Drawing.Size(118, 29);
-            this.uiButton3.TabIndex = 14;
-            this.uiButton3.Text = "主页";
-            this.uiButton3.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-
-            // 
             // uiButton5
             // 
             this.uiButton5.BackColor = System.Drawing.Color.White;
             this.uiButton5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.uiButton5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton5.Location = new System.Drawing.Point(0, 29);
+            this.uiButton5.Location = new System.Drawing.Point(0, 0);
             this.uiButton5.Margin = new System.Windows.Forms.Padding(0);
             this.uiButton5.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton5.Name = "uiButton5";
@@ -790,6 +774,22 @@
             this.uiButton5.TabIndex = 16;
             this.uiButton5.Text = "COM配置";
             this.uiButton5.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton5.Click += new System.EventHandler(this.uiButton5_Click);
+            // 
+            // uiButton3
+            // 
+            this.uiButton3.BackColor = System.Drawing.Color.White;
+            this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton3.Location = new System.Drawing.Point(821, 228);
+            this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton3.Name = "uiButton3";
+            this.uiButton3.Radius = 10;
+            this.uiButton3.Size = new System.Drawing.Size(97, 29);
+            this.uiButton3.TabIndex = 13;
+            this.uiButton3.Text = "搜索";
+            this.uiButton3.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton3.Click += new System.EventHandler(this.uiButton3_Click);
             // 
             // Form1
             // 
@@ -873,8 +873,8 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-        private Sunny.UI.UIButton uiButton3;
         private Sunny.UI.UIButton uiButton5;
+        private Sunny.UI.UIButton uiButton3;
     }
 }
 
