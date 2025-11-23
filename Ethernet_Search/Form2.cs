@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,11 @@ using System.Windows.Forms;
 namespace Ethernet_Search
 {
     public partial class Form2 : Form
-    {   
-        public String usedComBaudRate = null;
-        public String usedComDataBit = null;
-        public String usedComStopBit = null;
-        public String usedComParity = null;
+    {
+        public int BaudRate { get; private set; }
+        public int DataBits { get; private set; }
+        public StopBits StopBits { get; private set; }
+        public Parity Parity { get; private set; }
 
         private List<string> comBaudRate = new List<string>();
         private List<string> comDataBits = new List<string>();
@@ -44,14 +45,16 @@ namespace Ethernet_Search
             comDataBits.Add("7");
             comDataBits.Add("8");
 
-            comStopBits.Add("0.5");
-            comStopBits.Add("1");
-            comStopBits.Add("1.5");
-            comStopBits.Add("2");
+            comStopBits.Add("None");
+            comStopBits.Add("One");
+            comStopBits.Add("Two");
+            comStopBits.Add("OnePointFive");
 
             comParity.Add("None");
             comParity.Add("Odd");
             comParity.Add("Even");
+            comParity.Add("Mark");
+            comParity.Add("Space");
 
             uiComboBox1.DataSource = comBaudRate;
             uiComboBox2.DataSource = comDataBits;
@@ -66,12 +69,13 @@ namespace Ethernet_Search
 
         private void uiButton1_Click(object sender, EventArgs e)
         {
-            usedComBaudRate = uiComboBox1.Text;
-            usedComDataBit = uiComboBox2.Text;
-            usedComStopBit = uiComboBox3.Text;
-            usedComParity = uiComboBox4.Text;
-
-            Form2.ActiveForm.Close();
+            BaudRate = uiComboBox1.SelectedIndex;
+            DataBits = uiComboBox2.SelectedIndex;
+            StopBits = (StopBits)uiComboBox3.SelectedIndex;
+            Parity = (Parity)uiComboBox4.SelectedIndex;
+            
+            DialogResult = DialogResult.OK; // 设置对话框结果
+            Close();
         }
     }
 }

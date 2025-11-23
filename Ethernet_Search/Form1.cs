@@ -206,11 +206,6 @@ namespace Ethernet_Search
 
                 serialPort_COM = new SerialPort(comPort);
 
-                comBaudRate = form2.usedComBaudRate != null ? int.Parse(form2.usedComBaudRate) : 9600;
-                comDataBits = form2.usedComDataBit != null ? int.Parse(form2.usedComDataBit) : 8;
-                comStopBits = form2.usedComStopBit != null ? (StopBits)Enum.Parse(typeof(StopBits), form2.usedComStopBit) : StopBits.One;
-                comParity = form2.usedComParity != null ? (Parity)Enum.Parse(typeof(Parity), form2.usedComParity) : Parity.None;
-
                 serialPort_COM.BaudRate = comBaudRate;
                 serialPort_COM.DataBits = comDataBits;
                 serialPort_COM.StopBits = comStopBits;
@@ -724,22 +719,33 @@ namespace Ethernet_Search
 
         private void uiButton5_Click(object sender, EventArgs e)
         {
-            // 创建 Form2 的实例
-            Form2 form2 = new Form2();
-            // 显示 Form2（模式窗口，打开后无法操作 Form1）
-            form2.ShowDialog();
-            // 或者使用 Show() 显示非模式窗口（可同时操作多个窗体）
-            // form2.Show();
-        }
+            if (uiComboBox3.SelectedItem == null)
+            {
+                MessageBox.Show("请先选择一个COM口！");
+                return; // 如果没有选择，则直接返回，不打开配置窗口
+            }
 
-        private void uiButton3_Click(object sender, EventArgs e)
-        {
-            comBaudRate = form2.usedComBaudRate != null ? int.Parse(form2.usedComBaudRate) : 9600;
-            comDataBits = form2.usedComDataBit != null ? int.Parse(form2.usedComDataBit) : 8;
-            comStopBits = form2.usedComStopBit != null ? (StopBits)Enum.Parse(typeof(StopBits), form2.usedComStopBit) : StopBits.One;
-            comParity = form2.usedComParity != null ? (Parity)Enum.Parse(typeof(Parity), form2.usedComParity) : Parity.None;
+            using (Form2 form2 = new Form2())
+            {
+                // 显示Form2为模态窗口，等待用户操作
+                if (form2.ShowDialog() == DialogResult.OK)
+                {
+                    // 从Form2的公共属性获取配置并更新Form1的参数
+                    comBaudRate = form2.BaudRate;
+                    comDataBits = form2.DataBits;
+                    comStopBits = form2.StopBits;
+                    comParity = form2.Parity;
 
-            MessageBox.Show(comBaudRate.ToString(), comDataBits.ToString());
+                    // 重新初始化串口（如果已打开则先关闭）
+                    if (serialPort_COM != null && serialPort_COM.IsOpen)
+                    {
+                        serialPort_COM.Close();
+                        serialPort_COM.Dispose();
+                    }
+                    // 用新参数重新打开串口
+                    StartSerialPortReceive(currentComPort); // 复用已有的打开串口方法
+                }
+            }
         }
     }
 }

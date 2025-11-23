@@ -89,7 +89,6 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.uiButton5 = new Sunny.UI.UIButton();
-            this.uiButton3 = new Sunny.UI.UIButton();
             this.uiGroupBox1.SuspendLayout();
             this.uiCheckBoxGroup1.SuspendLayout();
             this.uiCheckBoxGroup6.SuspendLayout();
@@ -278,7 +277,6 @@
             // 
             // uiGroupBox1
             // 
-            this.uiGroupBox1.Controls.Add(this.uiButton3);
             this.uiGroupBox1.Controls.Add(this.uiCheckBoxGroup1);
             this.uiGroupBox1.Controls.Add(this.uiCheckBoxGroup6);
             this.uiGroupBox1.Controls.Add(this.uiDataGridView1);
@@ -776,21 +774,6 @@
             this.uiButton5.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiButton5.Click += new System.EventHandler(this.uiButton5_Click);
             // 
-            // uiButton3
-            // 
-            this.uiButton3.BackColor = System.Drawing.Color.White;
-            this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton3.Location = new System.Drawing.Point(821, 228);
-            this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton3.Name = "uiButton3";
-            this.uiButton3.Radius = 10;
-            this.uiButton3.Size = new System.Drawing.Size(97, 29);
-            this.uiButton3.TabIndex = 13;
-            this.uiButton3.Text = "搜索";
-            this.uiButton3.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton3.Click += new System.EventHandler(this.uiButton3_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -874,7 +857,6 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private Sunny.UI.UIButton uiButton5;
-        private Sunny.UI.UIButton uiButton3;
     }
 }
 
