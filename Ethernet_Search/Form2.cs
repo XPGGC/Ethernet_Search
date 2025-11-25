@@ -18,10 +18,10 @@ namespace Ethernet_Search
         public StopBits StopBits { get; private set; }
         public Parity Parity { get; private set; }
 
-        private List<string> comBaudRate = new List<string>();
-        private List<string> comDataBits = new List<string>();
-        private List<string> comStopBits = new List<string>();
-        private List<string> comParity = new List<string>();
+        private List<int> comBaudRate = new List<int>();
+        private List<int> comDataBits = new List<int>();
+        private List<StopBits> comStopBits = new List<StopBits>();
+        private List<Parity> comParity = new List<Parity>();
 
         public Form2()
         {
@@ -36,30 +36,35 @@ namespace Ethernet_Search
         private void comConfig(object sender, EventArgs e)
         { 
             comBaudRate.Clear();
-            comBaudRate.Add("1200");
-            comBaudRate.Add("2400");
-            comBaudRate.Add("4800");
-            comBaudRate.Add("9600");
-            comBaudRate.Add("14400");
+            comBaudRate.Add(1200);
+            comBaudRate.Add(2400);
+            comBaudRate.Add(4800);
+            comBaudRate.Add(9600);
+            comBaudRate.Add(14400);
 
-            comDataBits.Add("7");
-            comDataBits.Add("8");
+            comDataBits.Add(7);
+            comDataBits.Add(8);
 
-            comStopBits.Add("None");
-            comStopBits.Add("One");
-            comStopBits.Add("Two");
-            comStopBits.Add("OnePointFive");
+            comStopBits.Add(StopBits.None);
+            comStopBits.Add(StopBits.One);
+            comStopBits.Add(StopBits.Two);
+            comStopBits.Add(StopBits.OnePointFive);
 
-            comParity.Add("None");
-            comParity.Add("Odd");
-            comParity.Add("Even");
-            comParity.Add("Mark");
-            comParity.Add("Space");
+            comParity.Add(Parity.None);
+            comParity.Add(Parity.Odd);
+            comParity.Add(Parity.Even);
+            comParity.Add(Parity.Mark);
+            comParity.Add(Parity.Space);
 
             uiComboBox1.DataSource = comBaudRate;
             uiComboBox2.DataSource = comDataBits;
             uiComboBox3.DataSource = comStopBits;
             uiComboBox4.DataSource = comParity;
+
+            BaudRate = 1200;
+            DataBits = 7;
+            StopBits = StopBits.None;
+            Parity = Parity.None;
         }
 
         private void uiButton2_Click(object sender, EventArgs e)
@@ -69,11 +74,11 @@ namespace Ethernet_Search
 
         private void uiButton1_Click(object sender, EventArgs e)
         {
-            BaudRate = uiComboBox1.SelectedIndex;
-            DataBits = uiComboBox2.SelectedIndex;
-            StopBits = (StopBits)uiComboBox3.SelectedIndex;
-            Parity = (Parity)uiComboBox4.SelectedIndex;
-            
+            BaudRate = (int)uiComboBox1.SelectedItem;
+            DataBits = (int)uiComboBox2.SelectedItem;
+            StopBits = (StopBits)uiComboBox3.SelectedItem;
+            Parity = (Parity)uiComboBox4.SelectedItem;
+
             DialogResult = DialogResult.OK; // 设置对话框结果
             Close();
         }

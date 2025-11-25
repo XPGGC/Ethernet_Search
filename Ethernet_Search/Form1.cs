@@ -471,8 +471,6 @@ namespace Ethernet_Search
                     //IsUdpcRecvStart_ST02 = true;
 
 
-
-
                     localIpep_ST02 = new IPEndPoint(IPAddress.Parse("0.0.0.0"), 2020); // 本机IP和监听端口号
                     udpcRecv_ST02 = new UdpClient(localIpep_ST02);
                     thrRecv_ST02 = new Thread(ReceiveMessage_ST021);
@@ -486,8 +484,6 @@ namespace Ethernet_Search
             {
                 MessageBox.Show("端口被占用");
             }
-
-
         }
 
 
@@ -742,8 +738,6 @@ namespace Ethernet_Search
                         serialPort_COM.Close();
                         serialPort_COM.Dispose();
                     }
-                    // 用新参数重新打开串口
-                    StartSerialPortReceive(currentComPort); // 复用已有的打开串口方法
                 }
             }
         }
