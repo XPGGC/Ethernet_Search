@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
@@ -42,6 +43,8 @@ namespace Ethernet_Search
         private int comWriteTimeout = 3000;
 
         Form2 form2 = new Form2();
+        private bool isReceiveHexDisplay = false;
+        private bool isSendHexMode = false;
 
         public Form1()
         {
@@ -132,7 +135,7 @@ namespace Ethernet_Search
             }
             catch (Exception ex)
             {
-                uiLabel1.Text = "COM搜索失败：";
+                uiLabel1.Text = $"COM搜索失败：{ex}";
             }
         }
         #region//COM搜索
@@ -309,7 +312,7 @@ namespace Ethernet_Search
             }
         }
 
-        // 处理接收到的消息（与UDP接收逻辑相同）
+        // 处理接收到的消息                 
         private void ProcessReceivedMessage(string message)
         {
             if (string.IsNullOrEmpty(message))
@@ -317,7 +320,7 @@ namespace Ethernet_Search
 
             Invoke((new Action(() =>
             {
-                textBox3.AppendText(message + "\r\n");
+                AppendReceivedText(message, true);
 
                 try
                 {
@@ -498,7 +501,7 @@ namespace Ethernet_Search
                     Invoke((new Action(() =>
                     {
 
-                        textBox3.AppendText(message);
+                        AppendReceivedText(message, false);
 
                         JObject jo = (JObject)JsonConvert.DeserializeObject(message);
                         try
@@ -537,13 +540,11 @@ namespace Ethernet_Search
                         }
                         catch (Exception ex)
                         {
-                            int a = 0;
                         }
                     })));
                 }
                 catch (Exception ex)
                 {
-
                 }
             }
         }
@@ -582,43 +583,54 @@ namespace Ethernet_Search
         {
             try
             {
-                string jsonData = textBox4.Text.Trim();
+                string payloadSource = textBox4.Text.Trim();
                 
-                if (string.IsNullOrEmpty(jsonData))
+                if (string.IsNullOrEmpty(payloadSource))
                 {
-                    uiLabel1.Text = "请输入要发送的JSON数据";
+                    uiLabel1.Text = isSendHexMode ? "请输入要发送的Hex数据" : "请输入要发送的JSON数据";
                     return;
                 }
 
-                // 验证JSON格式
-                try
+                byte[] payload;
+                if (isSendHexMode)
                 {
-                    JObject.Parse(jsonData);
+                    if (!TryConvertHexInput(payloadSource, out payload, out string hexError))
+                    {
+                        uiLabel1.Text = hexError;
+                        return;
+                    }
                 }
-                catch
+                else
                 {
-                    uiLabel1.Text = "JSON格式错误，请检查数据格式";
-                    return;
+                    // 验证JSON格式
+                    try
+                    {
+                        JObject.Parse(payloadSource);
+                    }
+                    catch
+                    {
+                        uiLabel1.Text = "JSON格式错误，请检查数据格式";
+                        return;
+                    }
+                    payload = Encoding.UTF8.GetBytes(payloadSource);
                 }
 
                 // 根据连接模式发送数据
                 if (currentConnectionMode == ConnectionMode.Ethernet)
                 {
                     // 网卡模式：通过UDP发送
-                    SendDataViaEthernet(jsonData);
+                    SendDataViaEthernet(payload);
                 }
                 else if (currentConnectionMode == ConnectionMode.Serial)
                 {
                     // COM口模式：通过串口发送
-                    SendDataViaSerial(jsonData);
+                    SendDataViaSerial(payload);
                 }
                 else
                 {
                     uiLabel1.Text = "请先进行设备搜索（网卡或COM）";
                     return;
                 }
-
-                uiLabel1.Text = "指令下发成功";
             }
             catch (Exception ex)
             {
@@ -627,7 +639,7 @@ namespace Ethernet_Search
         }
 
         // 通过网卡（UDP）发送数据
-        private void SendDataViaEthernet(string jsonData)
+        private void SendDataViaEthernet(byte[] payload)
         {
             try
             {
@@ -653,8 +665,7 @@ namespace Ethernet_Search
                         endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);
                     }
                     
-                    byte[] buffer = Encoding.UTF8.GetBytes(jsonData);
-                    client_ST02.Send(buffer, buffer.Length, endpoint_ST02);
+                    client_ST02.Send(payload, payload.Length, endpoint_ST02);
                     uiLabel1.Text = "指令已通过UDP广播发送";
                 }
                 else
@@ -667,8 +678,7 @@ namespace Ethernet_Search
                     }
                     
                     IPEndPoint targetEndpoint = new IPEndPoint(IPAddress.Parse(targetDeviceIP), 2020);
-                    byte[] buffer = Encoding.UTF8.GetBytes(jsonData);
-                    client_ST02.Send(buffer, buffer.Length, targetEndpoint);
+                    client_ST02.Send(payload, payload.Length, targetEndpoint);
                     uiLabel1.Text = "指令已发送到设备：" + targetDeviceIP;
                 }
             }
@@ -679,7 +689,7 @@ namespace Ethernet_Search
         }
 
         // 通过串口发送数据
-        private void SendDataViaSerial(string jsonData)
+        private void SendDataViaSerial(byte[] payload)
         {
             try
             {
@@ -698,8 +708,7 @@ namespace Ethernet_Search
 
                 if (serialPort_COM != null && serialPort_COM.IsOpen)
                 {
-                    byte[] buffer = Encoding.UTF8.GetBytes(jsonData);
-                    serialPort_COM.Write(buffer, 0, buffer.Length);
+                    serialPort_COM.Write(payload, 0, payload.Length);
                     uiLabel1.Text = "指令已通过COM口发送：" + currentComPort;
                 }
                 else
@@ -740,6 +749,99 @@ namespace Ethernet_Search
                     }
                 }
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            isReceiveHexDisplay = checkBox1.Checked;
+            uiLabel1.Text = isReceiveHexDisplay ? "接收区使用Hex显示" : "接收区使用文本显示";
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            isSendHexMode = checkBox2.Checked;
+            uiLabel1.Text = isSendHexMode ? "指令将按Hex发送" : "指令将按文本发送";
+        }
+
+        private void AppendReceivedText(string message, bool appendNewLine)
+        {
+            string formatted = FormatReceivedMessage(message);
+            if (appendNewLine)
+            {
+                textBox3.AppendText(formatted + Environment.NewLine);
+            }
+            else
+            {
+                textBox3.AppendText(formatted);
+            }
+        }
+
+        private string FormatReceivedMessage(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                return string.Empty;
+            }
+
+            if (!isReceiveHexDisplay)
+            {
+                return message;
+            }
+
+            byte[] bytes = Encoding.UTF8.GetBytes(message);
+            return BitConverter.ToString(bytes).Replace("-", " ");
+        }
+
+        private bool TryConvertHexInput(string input, out byte[] payload, out string error)
+        {
+            payload = null;
+            error = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                error = "请输入要发送的Hex数据";
+                return false;
+            }
+
+            string sanitized = input.Replace("0x", "").Replace("0X", "");
+            sanitized = sanitized.Replace(",", "").Replace(";", "");
+            sanitized = sanitized.Replace("\r", "").Replace("\n", "").Replace("\t", "").Replace(" ", "");
+
+            if (sanitized.Length == 0)
+            {
+                error = "请输入合法的Hex数据";
+                return false;
+            }
+
+            if (sanitized.Length % 2 != 0)
+            {
+                error = "Hex数据长度必须为偶数";
+                return false;
+            }
+
+            for (int i = 0; i < sanitized.Length; i++)
+            {
+                if (!Uri.IsHexDigit(sanitized[i]))
+                {
+                    error = "包含非法字符，无法解析Hex数据";
+                    return false;
+                }
+            }
+
+            int byteCount = sanitized.Length / 2;
+            payload = new byte[byteCount];
+            for (int i = 0; i < byteCount; i++)
+            {
+                string byteValue = sanitized.Substring(i * 2, 2);
+                if (!byte.TryParse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out payload[i]))
+                {
+                    error = "Hex数据解析失败";
+                    payload = null;
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
