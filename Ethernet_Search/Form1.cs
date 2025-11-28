@@ -36,9 +36,6 @@ namespace Ethernet_Search
 
         private string jsonData = ""; // 要发送的JSON数据
 
-        // COM配置参数
-        private const string readCom = "{\r\n \"messageId\":\"1718711447026\",\r\n \"parameter\":\"COM\"\r\n }";
-
         private int comBaudRate = 9600;
         private int comDataBits = 8;
         private StopBits comStopBits = StopBits.One;
@@ -52,7 +49,8 @@ namespace Ethernet_Search
             { "实时修改网络接入方式", "{\r\n \"parameterInfo\" : {\r\n \"networkWay\" : 0,\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"networkWay\",\r\n \"messageId\" : \"1718776504184\"\r\n }" },
             { "修改4G参数", "{\r\n \"parameterInfo\" : {\r\n \"4G\" : [ {\r\n \"interfaceName\" : \"4G1\",\r\n \"interfacePar\" : {\r\n \"content\" : \"\",\r\n \"username\" : \"\",\r\n \"password\" : \"\",\r\n \"auth\" : 3,\r\n \"ethNetworkSegment\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n说明\r\n在线修改声明，值为1时表示实时生效，\r\n否则修改会失效\r\n25\r\n},\r\n \"parameter\" : \"4G\",\r\n \"messageId\" : \"1718776952659\"\r\n }" },
             { "修改COM口参数", "{\r\n \"parameterInfo\" : {\r\n \"COM\": [ {\r\n \"interfaceName\" : \"COM2\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"frameBreakTime\" : 0,\r\n \"baudRate\" : 9600,\r\n \"dataBits\" : 8,\r\n \"stopBits\" : 1,\r\n \"parity\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"COM\",\r\n \"messageId\" : \"1718768583565\"\r\n }"},
-            { "修改Ethernet 参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n" }
+            { "修改Ethernet参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n" },
+            {"", ""}
         };
 
 
@@ -92,7 +90,6 @@ namespace Ethernet_Search
                 this.uiDataGridView1.Rows.Clear();
                 string SearchIp = uiComboBox1.Text;
 
-
                 //再扫描S702网关
                 client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
                 endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
@@ -100,7 +97,6 @@ namespace Ethernet_Search
                 String sendMessage1 = "{\"messageId\":\"" + ressss2 + "\",\"parameter\":\"information\"}";
                 byte[] buf2 = Encoding.Default.GetBytes(sendMessage1);
                 client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
-                //textBox4.Text = textBox4.Text.ToString() + "\r\n" + sendMessage1;
 
                 // 设置连接模式为网卡模式
                 currentConnectionMode = ConnectionMode.Ethernet;
@@ -363,21 +359,11 @@ namespace Ethernet_Search
                             this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
                         }
                     }
-                    else if (tb_type == 1)
-                    {
-                        MessageBox.Show("1");
-                        //扫描COM口信息
-                        if (jo.Property("parameterInfo") != null)
-                        {
-                            JObject information = (JObject)jo["parameterInfo"]["COM"][0]["interfaceName"];
-                            uiLabel1.Text = (string)information;
-                        }
-                    }
                 }
                 catch (Exception ex)
-                {
-                    // JSON解析失败，忽略
-                }
+                    {
+                        // JSON解析失败，忽略
+                    }
             })));
         }
 
@@ -555,17 +541,6 @@ namespace Ethernet_Search
 
                                 }
                             }
-                            else if (tb_type == 1)
-                            {
-                                MessageBox.Show("1");
-                                //扫描COM口信息
-                                if (jo.Property("parameterInfo") != null)
-                                {
-                                    JObject information = (JObject)jo["parameterInfo"]["COM"][0]["interfaceName"];
-                                    uiLabel1.Text = (string)information;
-                                }
-                            }
-
                         }
                         catch (Exception ex)
                         {
@@ -627,6 +602,7 @@ namespace Ethernet_Search
                     client_ST02.Send(payload, payload.Length, targetEndpoint);
                     uiLabel1.Text = "指令已发送到设备：" + targetDeviceIP;
                 }
+
             }
             catch (Exception ex)
             {
@@ -675,43 +651,93 @@ namespace Ethernet_Search
                 // 显示Form2为模态窗口，等待用户操作
                 if (form2.ShowDialog() == DialogResult.OK)
                 {
-                    // 重新初始化串口（如果已打开则先关闭）
-                    if (serialPort_COM != null && serialPort_COM.IsOpen)
+                    try
                     {
-                        serialPort_COM.Close();
-                        serialPort_COM.Dispose();
+                        //将 JSON 字符串解析为 JObject
+                        JObject jsonObj = JObject.Parse(value);
 
-                        try
-                        {
-                            //将 JSON 字符串解析为 JObject
-                            JObject jsonObj = JObject.Parse(value);
+                        //更新 JSON 对象中的参数值
+                        jsonObj["parameterInfo"]["COM"][0]["interfaceName"] = form2.Com;
+                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["baudRate"] = form2.BaudRate;
+                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["dataBits"] = form2.DataBits;
+                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["stopBits"] = (int)form2.StopBits;
+                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["parity"] = (int)form2.Parity;
 
-                            //更新 JSON 对象中的参数值
-                            jsonObj["parameterInfo"]["COM"][0]["interfaceName"] = form2.Com;
-                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["baudRate"] = form2.BaudRate;
-                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["dataBits"] = form2.DataBits;
-                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["stopBits"] = (int)form2.StopBits;
-                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["parity"] = (int)form2.Parity;
-
-                            //将更新后的 JObject 转回 JSON 字符串
-                            jsonData = jsonObj.ToString(Formatting.None);
-
-                            // 更新串口配置参数
-                            comBaudRate = form2.BaudRate;
-                            comDataBits = form2.DataBits;
-                            comStopBits = form2.StopBits;
-                            comParity = form2.Parity;
-
-                            // 重新启动串口监听
-                            StartSerialPortReceive(currentComPort);
-                        }
-                        catch (Exception ex)
-                        {
-                        }
+                        //将更新后的 JObject 转回 JSON 字符串
+                        jsonData = jsonObj.ToString(Formatting.None);
+                    }
+                    catch (Exception ex)
+                    {
                     }
                 }
             }
         }
+
+
+        private void config4G(string value)
+        {
+            using (Form3 form3 = new Form3())
+            {
+                // 显示Form3为模态窗口，等待用户操作
+                if (form3.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        //将 JSON 字符串解析为 JObject
+                        JObject jsonObj = JObject.Parse(value);
+
+                        //更新 JSON 对象中的参数值
+                        jsonObj["parameterInfo"]["4G"][0]["interfaceName"] = form3.interfaceName;
+                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["content"] = form3.content;
+                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["username"] = form3.username;
+                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["password"] = form3.password;
+                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["auth"] = form3.auth;
+                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["ethNetworkSegment"] = form3.ethNetworkSegment;
+
+                        //将更新后的 JObject 转回 JSON 字符串
+                        jsonData = jsonObj.ToString(Formatting.None);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+        }
+
+
+        private void configEthernet(string value)
+        {
+            using (Form4 form4 = new Form4())
+            {
+                // 显示Form4为模态窗口，等待用户操作
+                if (form4.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        //将 JSON 字符串解析为 JObject
+                        JObject jsonObj = JObject.Parse(value);
+
+                        //更新 JSON 对象中的参数值
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfaceName"] = form4.interfaceName;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dhcp"] = form4.dhcp;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ip"] = form4.ip;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["subnetMask"] = form4.subnetMask;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["mac"] = form4.mac;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns"] = form4.dns;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns2"] = form4.dns2;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ntp"] = form4.ntp;
+                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["gateway"] = form4.gateway;
+
+                        //将更新后的 JObject 转回 JSON 字符串
+                        jsonData = jsonObj.ToString(Formatting.None);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+        }
+
 
         private void button11_Click(object sender, EventArgs e)
         {
@@ -719,6 +745,8 @@ namespace Ethernet_Search
             string value = COMMANDS.ElementAt(uiComboBox2.SelectedIndex).Value;
 
             if (key == "修改COM口参数") configCom(value);
+            if (key == "修改Ethernet参数") configEthernet(value);
+            if (key == "修改4G参数") config4G(value);
 
             try
             {
