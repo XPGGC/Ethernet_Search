@@ -73,10 +73,10 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.uiGroupBox2 = new Sunny.UI.UIGroupBox();
+            this.uiButton2 = new Sunny.UI.UIButton();
+            this.uiComboBox2 = new Sunny.UI.UIComboBox();
             this.uiLabel1 = new Sunny.UI.UILabel();
             this.uiComboBox3 = new Sunny.UI.UIComboBox();
-            this.uiComboBox2 = new Sunny.UI.UIComboBox();
-            this.uiButton2 = new Sunny.UI.UIButton();
             this.uiGroupBox1.SuspendLayout();
             this.uiCheckBoxGroup6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiDataGridView1)).BeginInit();
@@ -510,7 +510,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(798, 526);
             this.tableLayoutPanel1.TabIndex = 7;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // flowLayoutPanel1
             // 
@@ -539,6 +538,40 @@
             this.uiGroupBox2.TabIndex = 8;
             this.uiGroupBox2.Text = null;
             this.uiGroupBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // uiButton2
+            // 
+            this.uiButton2.BackColor = System.Drawing.Color.White;
+            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton2.Location = new System.Drawing.Point(665, 265);
+            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton2.Name = "uiButton2";
+            this.uiButton2.Radius = 10;
+            this.uiButton2.Size = new System.Drawing.Size(97, 29);
+            this.uiButton2.TabIndex = 13;
+            this.uiButton2.Text = "确认";
+            this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton2.Click += new System.EventHandler(this.uiButton2_Click);
+            // 
+            // uiComboBox2
+            // 
+            this.uiComboBox2.DataSource = null;
+            this.uiComboBox2.DropDownStyle = Sunny.UI.UIDropDownStyle.DropDownList;
+            this.uiComboBox2.FillColor = System.Drawing.Color.White;
+            this.uiComboBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiComboBox2.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
+            this.uiComboBox2.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.uiComboBox2.Location = new System.Drawing.Point(499, 201);
+            this.uiComboBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiComboBox2.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiComboBox2.Name = "uiComboBox2";
+            this.uiComboBox2.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiComboBox2.Size = new System.Drawing.Size(263, 29);
+            this.uiComboBox2.SymbolSize = 24;
+            this.uiComboBox2.TabIndex = 9;
+            this.uiComboBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiComboBox2.Watermark = "";
             // 
             // uiLabel1
             // 
@@ -572,39 +605,6 @@
             this.uiComboBox3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             this.uiComboBox3.Watermark = "";
             // 
-            // uiComboBox2
-            // 
-            this.uiComboBox2.DataSource = null;
-            this.uiComboBox2.DropDownStyle = Sunny.UI.UIDropDownStyle.DropDownList;
-            this.uiComboBox2.FillColor = System.Drawing.Color.White;
-            this.uiComboBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiComboBox2.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
-            this.uiComboBox2.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.uiComboBox2.Location = new System.Drawing.Point(612, 201);
-            this.uiComboBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiComboBox2.MinimumSize = new System.Drawing.Size(63, 0);
-            this.uiComboBox2.Name = "uiComboBox2";
-            this.uiComboBox2.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
-            this.uiComboBox2.Size = new System.Drawing.Size(150, 29);
-            this.uiComboBox2.SymbolSize = 24;
-            this.uiComboBox2.TabIndex = 9;
-            this.uiComboBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiComboBox2.Watermark = "";
-            // 
-            // uiButton2
-            // 
-            this.uiButton2.BackColor = System.Drawing.Color.White;
-            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton2.Location = new System.Drawing.Point(665, 265);
-            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton2.Name = "uiButton2";
-            this.uiButton2.Radius = 10;
-            this.uiButton2.Size = new System.Drawing.Size(97, 29);
-            this.uiButton2.TabIndex = 13;
-            this.uiButton2.Text = "确认";
-            this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -613,7 +613,6 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.uiGroupBox1.ResumeLayout(false);
             this.uiCheckBoxGroup6.ResumeLayout(false);
