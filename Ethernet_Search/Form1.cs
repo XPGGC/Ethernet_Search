@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sunny.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -36,6 +37,8 @@ namespace Ethernet_Search
 
         private string jsonData = ""; // 要发送的JSON数据
 
+        private const string READCOM = "{\r\n \"messageId\":\"1718711447026\",\r\n \"parameter\":\"COM\"\r\n }";
+
         private int comBaudRate = 9600;
         private int comDataBits = 8;
         private StopBits comStopBits = StopBits.One;
@@ -43,14 +46,28 @@ namespace Ethernet_Search
         private int comReadTimeout = 3000;
         private int comWriteTimeout = 3000;
 
+        //网口读取接口
+        private Dictionary<string, string> readInterface = new Dictionary<string, string>
+        { };
+
+        //接口映射
+        private Dictionary<string, string> interfaceMap = new Dictionary<string, string>
+        {
+            { "4G", "修改4G参数" },
+            { "Ethernet", "修改Ethernet参数" },
+            { "WiFi", "修改WiFi参数" },
+            { "COM", "修改COM口参数" },
+            { "LoRa", "修改LoRa参数" },
+        };
+
         //配置指令集
         private Dictionary<string, string> COMMANDS = new Dictionary<string, string>
         {
-            { "实时修改网络接入方式", "{\r\n \"parameterInfo\" : {\r\n \"networkWay\" : 0,\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"networkWay\",\r\n \"messageId\" : \"1718776504184\"\r\n }" },
             { "修改4G参数", "{\r\n \"parameterInfo\" : {\r\n \"4G\" : [ {\r\n \"interfaceName\" : \"4G1\",\r\n \"interfacePar\" : {\r\n \"content\" : \"\",\r\n \"username\" : \"\",\r\n \"password\" : \"\",\r\n \"auth\" : 3,\r\n \"ethNetworkSegment\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n说明\r\n在线修改声明，值为1时表示实时生效，\r\n否则修改会失效\r\n25\r\n},\r\n \"parameter\" : \"4G\",\r\n \"messageId\" : \"1718776952659\"\r\n }" },
-            { "修改COM口参数", "{\r\n \"parameterInfo\" : {\r\n \"COM\": [ {\r\n \"interfaceName\" : \"COM2\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"frameBreakTime\" : 0,\r\n \"baudRate\" : 9600,\r\n \"dataBits\" : 8,\r\n \"stopBits\" : 1,\r\n \"parity\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"COM\",\r\n \"messageId\" : \"1718768583565\"\r\n }"},
             { "修改Ethernet参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n" },
-            {"", ""}
+            { "修改WiFi参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"onlineModification\" : 1,\r\n \"WiFi\" : [ {\r\n \"interfaceName\" : \"WiFi1\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.41\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"FF:FF:FF:FF:FF:FF\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\",\r\n \"username\" : \"yunkenceshi\",\r\n \"password\" : \"yk86557810...\",\r\n \"distributionNetworkEnabled\" : 0\r\n }\r\n } ]\r\n },\r\n \"parameter\" : \"WiFi\",\r\n \"messageId\" : \"1718883684255\"\r\n"},
+            { "修改COM口参数", "{\r\n \"parameterInfo\" : {\r\n \"COM\": [ {\r\n \"interfaceName\" : \"COM2\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"frameBreakTime\" : 0,\r\n \"baudRate\" : 9600,\r\n \"dataBits\" : 8,\r\n \"stopBits\" : 1,\r\n \"parity\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"COM\",\r\n \"messageId\" : \"1718768583565\"\r\n }"},
+            { "修改LoRa参数", ""},
         };
 
 
@@ -295,7 +312,7 @@ namespace Ethernet_Search
                                 }
 
                                 // 处理接收到的JSON消息
-                                ProcessReceivedMessage(jsonMessage);
+                                ProcessDeviceInfoMessage(jsonMessage);
                             }
                         }
                     }
@@ -320,51 +337,73 @@ namespace Ethernet_Search
             }
         }
 
-        // 处理接收到的消息                 
-        private void ProcessReceivedMessage(string message)
+        // 处理网口/串口接收到的消息
+        private void ProcessDeviceInfoMessage(string message)
         {
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrWhiteSpace(message))
                 return;
 
-            Invoke((new Action(() =>
+            if (InvokeRequired)
             {
-                try
+                Invoke(new Action(() => ProcessDeviceInfoMessage(message)));
+                return;
+            }
+
+            try
+            {
+                if (tb_type != -1)
+                    return;
+
+                JObject jo = JObject.Parse(message);
+                JObject information = null;
+
+                if (jo["parameterInfo"]?["information"] is JObject parameterInfo)
                 {
-                    JObject jo = (JObject)JsonConvert.DeserializeObject(message);
-                    if (tb_type == -1)
+                    information = parameterInfo;
+                }
+                else if (jo["information"] is JObject info)
+                {
+                    information = info;
+                }
+
+                if (information == null)
+                    return;
+
+                int index = uiDataGridView1.Rows.Add();
+                DataGridViewRow row = uiDataGridView1.Rows[index];
+                row.Cells[0].Value = index;
+                row.Cells[1].Value = (string)information["product"]?["name"];
+                row.Cells[2].Value = (string)information["product"]?["model"];
+                row.Cells[3].Value = (string)information["product"]?["sn"];
+                row.Cells[4].Value = (string)(information["Ethernet1"]?["ip"] ?? information["localIp"]?["ip"]);
+                row.Cells[5].Value = (string)information["product"]?["version"];
+                row.Cells[6].Value = (string)information["product"]?["alias"];
+
+                readInterface.Clear();
+                readInterface.Add("4G", (string)information["interfaces"]["4G"]);
+                readInterface.Add("Ethernet", (string)information["interfaces"]["Ethernet"]);
+                readInterface.Add("WiFi", (string)information["interfaces"]["WiFi"]);
+                readInterface.Add("COM", (string)information["interfaces"]["COM"]);
+                readInterface.Add("LoRa", (string)information["interfaces"]["LoRa"]);
+                readInterface.Add("Zigbee", (string)information["interfaces"]["Zigbee"]);
+                readInterface.Add("Local", (string)information["interfaces"]["Local"]);
+
+                List<string> list = new List<string>
+                { };
+                // 根据读取到的接口信息更新命令列表
+                foreach (string key in readInterface.Keys)
+                {
+                    if (readInterface[key] != "0")
                     {
-                        //扫描网关信息
-                        if (jo.Property("parameterInfo") != null)
-                        {
-                            JObject information = (JObject)jo["parameterInfo"]["information"];
-                            int index = this.uiDataGridView1.Rows.Add();
-                            this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                            this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                            this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                            this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                            //this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["Ethernet1"]["ip"];
-                            this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                            this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-                        }
-                        else if (jo.Property("information") != null)
-                        {
-                            JObject information = (JObject)jo["information"];
-                            int index = this.uiDataGridView1.Rows.Add();
-                            this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                            this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                            this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                            this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                            //this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["localIp"]["ip"];
-                            this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                            this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-                        }
+                        list.Add(interfaceMap[key]);
                     }
                 }
-                catch (Exception ex)
-                    {
-                        // JSON解析失败，忽略
-                    }
-            })));
+                uiComboBox2.DataSource = list;
+            }
+            catch
+            {
+                // JSON解析失败，忽略
+            }
         }
 
         // 关闭串口
@@ -451,7 +490,6 @@ namespace Ethernet_Search
             }
             uiComboBox1.DataSource = typeListIP;
 
-            uiComboBox2.DataSource = COMMANDS.Keys.ToList();
         }
 
         static bool IsUdpcRecvStart_ST02 = false;
@@ -487,7 +525,6 @@ namespace Ethernet_Search
                     thrRecv_ST02 = new Thread(ReceiveMessage_ST021);
                     thrRecv_ST02.Start();
                     IsUdpcRecvStart_ST02 = true;
-                    //MessageBox.Show("UDP监听器已成功启动");
                 }
 
             }
@@ -506,46 +543,7 @@ namespace Ethernet_Search
                 {
                     byte[] bytRecv = udpcRecv_ST02.Receive(ref localIpep_ST02);
                     string message = Encoding.UTF8.GetString(bytRecv, 0, bytRecv.Length);
-                    Invoke((new Action(() =>
-                    {
-                        JObject jo = (JObject)JsonConvert.DeserializeObject(message);
-                        try
-                        {
-                            if (tb_type == -1)
-                            {
-                                //扫描网关信息
-                                if (jo.Property("parameterInfo") != null)
-                                {
-                                    JObject information = (JObject)jo["parameterInfo"]["information"];
-                                    int index = this.uiDataGridView1.Rows.Add();
-                                    this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                                    this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                                    this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                                    this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                                    this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["Ethernet1"]["ip"];
-                                    this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                                    this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-
-                                }
-                                else if (jo.Property("information") != null)
-                                {
-                                    JObject information = (JObject)jo["information"];
-                                    int index = this.uiDataGridView1.Rows.Add();
-                                    this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                                    this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                                    this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                                    this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                                    this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["localIp"]["ip"];
-                                    this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                                    this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                        }
-                    })));
+                    ProcessDeviceInfoMessage(message);
                 }
                 catch (Exception ex)
                 {
@@ -558,7 +556,6 @@ namespace Ethernet_Search
         {
             string name = uiComboBox4.Text;
             List<String> typeListIP = new List<string>();
-            //textBox1.Text = IPinfo[name];
             string morenips1 = IPinfo[name].ToString();
             string[] morenips = morenips1.Split('|');
             for (int i = 0; i < morenips.Count(); i++)
@@ -646,6 +643,8 @@ namespace Ethernet_Search
 
         private void configCom(string value)
         {
+            
+
             using (Form2 form2 = new Form2())
             {
                 // 显示Form2为模态窗口，等待用户操作
@@ -739,6 +738,43 @@ namespace Ethernet_Search
         }
 
 
+        private void configWiFi(string value)
+        {
+            using (Form5 form5 = new Form5())
+            {
+                // 显示Form5为模态窗口，等待用户操作
+                if (form5.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        //将 JSON 字符串解析为 JObject
+                        JObject jsonObj = JObject.Parse(value);
+
+                        //更新 JSON 对象中的参数值
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfaceName"] = form5.interfaceName;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["dhcp"] = form5.dhcp;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["ip"] = form5.ip;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["subnetMask"] = form5.subnetMask;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["mac"] = form5.mac;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["dns"] = form5.dns;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["dns2"] = form5.dns2;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["ntp"] = form5.ntp;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["gateway"] = form5.gateway;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["username"] = form5.username;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["password"] = form5.password;
+                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["distributionNetworkEnabled"] = form5.distributionNetworkEnabled;
+
+                        //将更新后的 JObject 转回 JSON 字符串
+                        jsonData = jsonObj.ToString(Formatting.None);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+        }
+
+
         private void button11_Click(object sender, EventArgs e)
         {
             string key = COMMANDS.ElementAt(uiComboBox2.SelectedIndex).Key;
@@ -747,6 +783,7 @@ namespace Ethernet_Search
             if (key == "修改COM口参数") configCom(value);
             if (key == "修改Ethernet参数") configEthernet(value);
             if (key == "修改4G参数") config4G(value);
+            if (key == "修改WiFi参数") configWiFi(value);
 
             try
             {
