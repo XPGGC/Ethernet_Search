@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
@@ -31,33 +32,46 @@ namespace Ethernet_Search
 
         private ConnectionMode currentConnectionMode = ConnectionMode.None;
         private string targetDeviceIP = "";  // 目标设备IP（网卡模式）
-        private SerialPort serialPort = null;  // 串口对象
-        private string selectedComPort = "";  // 选中的COM口
-        private StringBuilder serialDataBuffer = new StringBuilder();  // 串口数据缓冲区
-        private AutoResetEvent serialDataReceived = new AutoResetEvent(false);  // 串口数据接收事件
-        private string receivedJsonData = "";  // 接收到的JSON数据
+        private string currentComPort = "";   // 当前COM口（串口模式）
 
-        private Dictionary<string, string> COMMANDS = new Dictionary<string, string>       
+        private string jsonData = ""; // 要发送的JSON数据
+
+        // COM配置参数
+        private const string readCom = "{\r\n \"messageId\":\"1718711447026\",\r\n \"parameter\":\"COM\"\r\n }";
+
+        private int comBaudRate = 9600;
+        private int comDataBits = 8;
+        private StopBits comStopBits = StopBits.One;
+        private Parity comParity = Parity.None;
+        private int comReadTimeout = 3000;
+        private int comWriteTimeout = 3000;
+
+        //配置指令集
+        private Dictionary<string, string> COMMANDS = new Dictionary<string, string>
         {
             { "实时修改网络接入方式", "{\r\n \"parameterInfo\" : {\r\n \"networkWay\" : 0,\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"networkWay\",\r\n \"messageId\" : \"1718776504184\"\r\n }" },
             { "修改4G参数", "{\r\n \"parameterInfo\" : {\r\n \"4G\" : [ {\r\n \"interfaceName\" : \"4G1\",\r\n \"interfacePar\" : {\r\n \"content\" : \"\",\r\n \"username\" : \"\",\r\n \"password\" : \"\",\r\n \"auth\" : 3,\r\n \"ethNetworkSegment\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n说明\r\n在线修改声明，值为1时表示实时生效，\r\n否则修改会失效\r\n25\r\n},\r\n \"parameter\" : \"4G\",\r\n \"messageId\" : \"1718776952659\"\r\n }" },
-            
+            { "修改COM口参数", "{\r\n \"parameterInfo\" : {\r\n \"COM\": [ {\r\n \"interfaceName\" : \"COM2\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"frameBreakTime\" : 0,\r\n \"baudRate\" : 9600,\r\n \"dataBits\" : 8,\r\n \"stopBits\" : 1,\r\n \"parity\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"COM\",\r\n \"messageId\" : \"1718768583565\"\r\n }"},
             { "修改Ethernet 参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n" }
         };
+
 
         public Form1()
         {
             InitializeComponent();
         }
 
-
         private void Form1_Load(object sender, EventArgs e)
         {
             Form1Search_Load();
-            LoadAvailableComPorts();  // 加载可用的COM口列表
+            GetPort(null, null);
         }
-
-
+        
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // 关闭串口
+            CloseSerialPort();
+        }
         /// <summary>
         /// 获取时间戳
         /// </summary>
@@ -67,6 +81,8 @@ namespace Ethernet_Search
             TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalMilliseconds).ToString();
         }
+
+
         private void uiButton1_Click(object sender, EventArgs e)
         {
             try
@@ -76,6 +92,7 @@ namespace Ethernet_Search
                 this.uiDataGridView1.Rows.Clear();
                 string SearchIp = uiComboBox1.Text;
 
+
                 //再扫描S702网关
                 client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
                 endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
@@ -83,7 +100,8 @@ namespace Ethernet_Search
                 String sendMessage1 = "{\"messageId\":\"" + ressss2 + "\",\"parameter\":\"information\"}";
                 byte[] buf2 = Encoding.Default.GetBytes(sendMessage1);
                 client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
-                
+                //textBox4.Text = textBox4.Text.ToString() + "\r\n" + sendMessage1;
+
                 // 设置连接模式为网卡模式
                 currentConnectionMode = ConnectionMode.Ethernet;
             }
@@ -91,7 +109,305 @@ namespace Ethernet_Search
             {
                 //UIMessageDialog.ShowInfoDialog(this, "请检查选中的网卡IP", UIStyle.Gray);
             }
+
         }
+        private void uiButton2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                tb_type = -1;
+                this.uiDataGridView1.Rows.Clear();
+                string comPort = uiComboBox3.Text;
+
+                if (string.IsNullOrEmpty(comPort))
+                {
+                    uiLabel1.Text = "请选择COM口";
+                    return;
+                }
+
+                // 启动串口监听
+                StartSerialPortReceive(comPort);
+
+                // 通过COM口发送查询命令
+                string ressss2 = GetTimeStamp();
+                String sendMessage1 = "{\"messageId\":\"" + ressss2 + "\",\"parameter\":\"information\"}";
+
+                if (serialPort_COM != null && serialPort_COM.IsOpen)
+                {
+                    byte[] buf2 = Encoding.UTF8.GetBytes(sendMessage1);
+                    serialPort_COM.Write(buf2, 0, buf2.Length);
+
+                    // 设置连接模式为串口模式
+                    currentConnectionMode = ConnectionMode.Serial;
+                    currentComPort = comPort;
+                }
+                else
+                {
+                    uiLabel1.Text = "COM口未打开，请检查COM口设置";
+                }
+            }
+            catch (Exception ex)
+            {
+                uiLabel1.Text = $"COM搜索失败：{ex}";
+            }
+        }
+        #region//COM搜索
+        //得到COM口
+        private void GetPort(object sender, EventArgs e)
+        {
+            try
+            {
+                List<string> list = new List<string>();
+                RegistryKey hklm = Registry.LocalMachine;
+
+                RegistryKey software11 = hklm.OpenSubKey("HARDWARE");
+
+                //打开"HARDWARE"子健
+                RegistryKey software = software11?.OpenSubKey("DEVICEMAP");
+
+                RegistryKey sitekey = software?.OpenSubKey("SERIALCOMM");
+
+                if (sitekey != null)
+                {
+                    //获取当前子健
+                    string[] Str2 = sitekey.GetValueNames();
+
+                    //获得当前子健下面所有健组成的字符串数组
+                    int ValueCount = sitekey.ValueCount;
+                    //获得当前子健存在的健值
+                    for (int i = 0; i < ValueCount; i++)
+                    {
+                        list.Add(sitekey.GetValue(Str2[i]).ToString());
+                    }
+                    sitekey.Close();
+                }
+                software?.Close();
+                software11?.Close();
+                hklm.Close();
+
+                if (list.Count > 0)
+                {
+                    uiComboBox3.DataSource = list.ToArray();
+                    uiLabel1.Text = "已查询到" + list.Count + "个COM接口";
+                }
+                else
+                {
+                    uiLabel1.Text = "无法查询到COM接口";
+                }
+            }
+            catch (Exception ex)
+            {
+                uiLabel1.Text = "查询COM接口失败：" + ex.Message;
+            }
+        }
+
+        // 串口相关变量
+        private SerialPort serialPort_COM = null;
+        private bool IsSerialPortRecvStart = false;
+        private Thread thrSerialRecv = null;
+
+        // 启动串口接收
+        private void StartSerialPortReceive(string comPort)
+        {
+            try
+            {
+                // 如果串口已打开，先关闭
+                if (serialPort_COM != null && serialPort_COM.IsOpen)
+                {
+                    serialPort_COM.Close();
+                    serialPort_COM.Dispose();
+                }
+
+                // 创建并配置串口（使用保存的配置参数）
+
+                serialPort_COM = new SerialPort(comPort);
+
+                serialPort_COM.BaudRate = comBaudRate;
+                serialPort_COM.DataBits = comDataBits;
+                serialPort_COM.StopBits = comStopBits;
+                serialPort_COM.Parity = comParity;
+                serialPort_COM.ReadTimeout = comReadTimeout;
+                serialPort_COM.WriteTimeout = comWriteTimeout;
+                serialPort_COM.Encoding = Encoding.UTF8;
+
+                // 打开串口
+                serialPort_COM.Open();
+
+                // 启动接收线程
+                if (!IsSerialPortRecvStart)
+                {
+                    IsSerialPortRecvStart = true;
+                    thrSerialRecv = new Thread(ReceiveSerialMessage);
+                    thrSerialRecv.IsBackground = true;
+                    thrSerialRecv.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                IsSerialPortRecvStart = false;
+                throw new Exception("打开COM口失败：" + ex.Message);
+            }
+        }
+
+        // 串口数据接收线程
+        private void ReceiveSerialMessage()
+        {
+            StringBuilder buffer = new StringBuilder();
+            while (IsSerialPortRecvStart && serialPort_COM != null && serialPort_COM.IsOpen)
+            {
+                try
+                {
+                    // 读取可用数据
+                    if (serialPort_COM.BytesToRead > 0)
+                    {
+                        byte[] bufferBytes = new byte[serialPort_COM.BytesToRead];
+                        int bytesRead = serialPort_COM.Read(bufferBytes, 0, bufferBytes.Length);
+                        string receivedData = Encoding.UTF8.GetString(bufferBytes, 0, bytesRead);
+                        buffer.Append(receivedData);
+
+                        // 尝试解析完整的JSON消息（假设以换行符或完整JSON对象结束）
+                        string fullMessage = buffer.ToString();
+
+                        // 尝试查找完整的JSON对象
+                        int jsonStart = fullMessage.IndexOf('{');
+                        if (jsonStart >= 0)
+                        {
+                            int braceCount = 0;
+                            int jsonEnd = -1;
+                            for (int i = jsonStart; i < fullMessage.Length; i++)
+                            {
+                                if (fullMessage[i] == '{') braceCount++;
+                                if (fullMessage[i] == '}') braceCount--;
+                                if (braceCount == 0)
+                                {
+                                    jsonEnd = i;
+                                    break;
+                                }
+                            }
+
+                            if (jsonEnd > jsonStart)
+                            {
+                                string jsonMessage = fullMessage.Substring(jsonStart, jsonEnd - jsonStart + 1);
+                                buffer.Clear();
+                                if (jsonStart > 0)
+                                {
+                                    buffer.Append(fullMessage.Substring(0, jsonStart));
+                                }
+                                if (jsonEnd < fullMessage.Length - 1)
+                                {
+                                    buffer.Append(fullMessage.Substring(jsonEnd + 1));
+                                }
+
+                                // 处理接收到的JSON消息
+                                ProcessReceivedMessage(jsonMessage);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Thread.Sleep(10); // 避免CPU占用过高
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    // 超时是正常的，继续等待
+                    Thread.Sleep(10);
+                }
+                catch (Exception ex)
+                {
+                    // 发生错误，记录但不中断
+                    Invoke((new Action(() =>
+                    {
+                    })));
+                    Thread.Sleep(100);
+                }
+            }
+        }
+
+        // 处理接收到的消息                 
+        private void ProcessReceivedMessage(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+                return;
+
+            Invoke((new Action(() =>
+            {
+                try
+                {
+                    JObject jo = (JObject)JsonConvert.DeserializeObject(message);
+                    if (tb_type == -1)
+                    {
+                        //扫描网关信息
+                        if (jo.Property("parameterInfo") != null)
+                        {
+                            JObject information = (JObject)jo["parameterInfo"]["information"];
+                            int index = this.uiDataGridView1.Rows.Add();
+                            this.uiDataGridView1.Rows[index].Cells[0].Value = index;
+                            this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
+                            this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
+                            this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
+                            //this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["Ethernet1"]["ip"];
+                            this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
+                            this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
+                        }
+                        else if (jo.Property("information") != null)
+                        {
+                            JObject information = (JObject)jo["information"];
+                            int index = this.uiDataGridView1.Rows.Add();
+                            this.uiDataGridView1.Rows[index].Cells[0].Value = index;
+                            this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
+                            this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
+                            this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
+                            //this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["localIp"]["ip"];
+                            this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
+                            this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
+                        }
+                    }
+                    else if (tb_type == 1)
+                    {
+                        MessageBox.Show("1");
+                        //扫描COM口信息
+                        if (jo.Property("parameterInfo") != null)
+                        {
+                            JObject information = (JObject)jo["parameterInfo"]["COM"][0]["interfaceName"];
+                            uiLabel1.Text = (string)information;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // JSON解析失败，忽略
+                }
+            })));
+        }
+
+        // 关闭串口
+        private void CloseSerialPort()
+        {
+            try
+            {
+                IsSerialPortRecvStart = false;
+                if (thrSerialRecv != null && thrSerialRecv.IsAlive)
+                {
+                    thrSerialRecv.Join(1000);
+                }
+                if (serialPort_COM != null && serialPort_COM.IsOpen)
+                {
+                    serialPort_COM.Close();
+                }
+                if (serialPort_COM != null)
+                {
+                    serialPort_COM.Dispose();
+                    serialPort_COM = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                // 忽略关闭时的错误
+            }
+        }
+
+        #endregion
 
         #region//网口搜索
         UdpClient client_ST02 = null;
@@ -128,6 +444,7 @@ namespace Ethernet_Search
                         {
                             ipxinxi = ipxinxi + "|" + ip;
                         }
+
                         //break;
                     }
                 }
@@ -151,14 +468,15 @@ namespace Ethernet_Search
             uiComboBox2.DataSource = COMMANDS.Keys.ToList();
         }
 
-
         static bool IsUdpcRecvStart_ST02 = false;
         private static Socket udpServer_ST02;
+
         static UdpClient udpcRecv_ST02 = null;
+
         static IPEndPoint localIpep_ST02 = null;
+
         static Thread thrRecv_ST02;
         int tb_type = -1;
-
 
         private void ST02_udp2020()
         {
@@ -177,6 +495,7 @@ namespace Ethernet_Search
                     //new Thread(ReceiveMessage_ST02) { IsBackground = true }.Start();
                     //IsUdpcRecvStart_ST02 = true;
 
+
                     localIpep_ST02 = new IPEndPoint(IPAddress.Parse("0.0.0.0"), 2020); // 本机IP和监听端口号
                     udpcRecv_ST02 = new UdpClient(localIpep_ST02);
                     thrRecv_ST02 = new Thread(ReceiveMessage_ST021);
@@ -184,6 +503,7 @@ namespace Ethernet_Search
                     IsUdpcRecvStart_ST02 = true;
                     //MessageBox.Show("UDP监听器已成功启动");
                 }
+
             }
             catch (Exception ex)
             {
@@ -202,7 +522,6 @@ namespace Ethernet_Search
                     string message = Encoding.UTF8.GetString(bytRecv, 0, bytRecv.Length);
                     Invoke((new Action(() =>
                     {
-
                         JObject jo = (JObject)JsonConvert.DeserializeObject(message);
                         try
                         {
@@ -236,10 +555,20 @@ namespace Ethernet_Search
 
                                 }
                             }
+                            else if (tb_type == 1)
+                            {
+                                MessageBox.Show("1");
+                                //扫描COM口信息
+                                if (jo.Property("parameterInfo") != null)
+                                {
+                                    JObject information = (JObject)jo["parameterInfo"]["COM"][0]["interfaceName"];
+                                    uiLabel1.Text = (string)information;
+                                }
+                            }
+
                         }
                         catch (Exception ex)
                         {
-                            int a = 0;
                         }
                     })));
                 }
@@ -249,7 +578,6 @@ namespace Ethernet_Search
             }
         }
         #endregion
-
 
         private void uiComboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -265,9 +593,8 @@ namespace Ethernet_Search
             uiComboBox1.DataSource = typeListIP;
         }
 
-
         // 通过网卡（UDP）发送数据
-        private void SendDataViaEthernet(string jsonData)
+        private void SendDataViaEthernet(byte[] payload)
         {
             try
             {
@@ -282,21 +609,9 @@ namespace Ethernet_Search
                     }
                 }
 
-                // 如果没有选中设备或IP为空，使用广播
+                // 如果没有选中设备或IP为空
                 if (string.IsNullOrEmpty(targetDeviceIP))
                 {
-                    //// 使用广播发送
-                    //if (client_ST02 == null || endpoint_ST02 == null)
-                    //{
-                    //    string SearchIp = uiComboBox1.Text;
-                    //    client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
-                    //    endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);
-                    //}
-
-                    //byte[] buffer = Encoding.UTF8.GetBytes(jsonData);
-                    //client_ST02.Send(buffer, buffer.Length, endpoint_ST02);
-                    //uiLabel1.Text = "指令已通过UDP广播发送";
-
                     uiLabel1.Text = "没有选中设备或IP为空";
                 }
                 else
@@ -307,10 +622,9 @@ namespace Ethernet_Search
                         string SearchIp = uiComboBox1.Text;
                         client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
                     }
-                    
+
                     IPEndPoint targetEndpoint = new IPEndPoint(IPAddress.Parse(targetDeviceIP), 2020);
-                    byte[] buffer = Encoding.UTF8.GetBytes(jsonData);
-                    client_ST02.Send(buffer, buffer.Length, targetEndpoint);
+                    client_ST02.Send(payload, payload.Length, targetEndpoint);
                     uiLabel1.Text = "指令已发送到设备：" + targetDeviceIP;
                 }
             }
@@ -320,306 +634,117 @@ namespace Ethernet_Search
             }
         }
 
-        private void uiButton2_Click(object sender, EventArgs e)
-        {
-            string key = COMMANDS.ElementAt(uiComboBox2.SelectedIndex).Value;
-            SendDataViaEthernet(key);
-        }
-
         // 通过串口发送数据
-        private void SendDataViaSerial(byte[] data)
+        private void SendDataViaSerial(byte[] payload)
         {
             try
             {
-                if (serialPort == null || !serialPort.IsOpen)
+                if (serialPort_COM == null || !serialPort_COM.IsOpen)
                 {
-                    if (string.IsNullOrEmpty(selectedComPort))
+                    // 如果串口未打开，尝试重新打开
+                    if (!string.IsNullOrEmpty(currentComPort))
                     {
-                        uiLabel1.Text = "请先选择COM口";
-                        return;
+                        StartSerialPortReceive(currentComPort);
                     }
-                    
-                    // 打开串口
-                    serialPort = new SerialPort(selectedComPort);
-                    serialPort.BaudRate = 9600;  // 默认波特率，可根据需要调整
-                    serialPort.DataBits = 8;
-                    serialPort.StopBits = StopBits.One;
-                    serialPort.Parity = Parity.None;
-                    serialPort.ReadTimeout = 3000;  // 增加读取超时时间
-                    serialPort.WriteTimeout = 1000;
-                    
-                    // 注册数据接收事件
-                    serialPort.DataReceived += SerialPort_DataReceived;
-                    
-                    serialPort.Open();
-                    
-                    // 设置连接模式为串口模式
-                    currentConnectionMode = ConnectionMode.Serial;
+                    else
+                    {
+                        throw new Exception("COM口未打开，请先进行COM搜索");
+                    }
                 }
-                
-                // 清空缓冲区
-                serialDataBuffer.Clear();
-                receivedJsonData = "";
-                
-                // 发送数据
-                serialPort.Write(data, 0, data.Length);
-                uiLabel1.Text = "指令已通过串口发送到：" + selectedComPort;
+
+                if (serialPort_COM != null && serialPort_COM.IsOpen)
+                {
+                    serialPort_COM.Write(payload, 0, payload.Length);
+                    uiLabel1.Text = "指令已通过COM口发送：" + currentComPort;
+                }
+                else
+                {
+                    throw new Exception("COM口打开失败");
+                }
             }
             catch (Exception ex)
             {
-                uiLabel1.Text = "串口发送失败：" + ex.Message;
                 throw new Exception("串口发送失败：" + ex.Message);
             }
         }
 
-        // 串口数据接收事件处理
-        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void configCom(string value)
         {
+            using (Form2 form2 = new Form2())
+            {
+                // 显示Form2为模态窗口，等待用户操作
+                if (form2.ShowDialog() == DialogResult.OK)
+                {
+                    // 重新初始化串口（如果已打开则先关闭）
+                    if (serialPort_COM != null && serialPort_COM.IsOpen)
+                    {
+                        serialPort_COM.Close();
+                        serialPort_COM.Dispose();
+
+                        try
+                        {
+                            //将 JSON 字符串解析为 JObject
+                            JObject jsonObj = JObject.Parse(value);
+
+                            //更新 JSON 对象中的参数值
+                            jsonObj["parameterInfo"]["COM"][0]["interfaceName"] = form2.Com;
+                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["baudRate"] = form2.BaudRate;
+                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["dataBits"] = form2.DataBits;
+                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["stopBits"] = (int)form2.StopBits;
+                            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["parity"] = (int)form2.Parity;
+
+                            //将更新后的 JObject 转回 JSON 字符串
+                            jsonData = jsonObj.ToString(Formatting.None);
+
+                            // 更新串口配置参数
+                            comBaudRate = form2.BaudRate;
+                            comDataBits = form2.DataBits;
+                            comStopBits = form2.StopBits;
+                            comParity = form2.Parity;
+
+                            // 重新启动串口监听
+                            StartSerialPortReceive(currentComPort);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            string key = COMMANDS.ElementAt(uiComboBox2.SelectedIndex).Key;
+            string value = COMMANDS.ElementAt(uiComboBox2.SelectedIndex).Value;
+
+            if (key == "修改COM口参数") configCom(value);
+
             try
             {
-                if (serialPort == null || !serialPort.IsOpen)
+                byte[] payload = Encoding.UTF8.GetBytes(jsonData);
+
+                // 根据连接模式发送数据
+                if (currentConnectionMode == ConnectionMode.Ethernet)
+                {
+                    // 网卡模式：通过UDP发送
+                    SendDataViaEthernet(payload);
+                }
+                else if (currentConnectionMode == ConnectionMode.Serial)
+                {
+                    // COM口模式：通过串口发送
+                    SendDataViaSerial(payload);
+                }
+                else
+                {
+                    uiLabel1.Text = "请先进行设备搜索（网卡或COM）";
                     return;
-
-                // 读取可用数据
-                int bytesToRead = serialPort.BytesToRead;
-                byte[] buffer = new byte[bytesToRead];
-                serialPort.Read(buffer, 0, bytesToRead);
-
-                // 将接收到的数据追加到缓冲区
-                string receivedData = Encoding.UTF8.GetString(buffer);
-                serialDataBuffer.Append(receivedData);
-
-                // 检查是否接收到完整的JSON数据（通常以}结尾）
-                string currentData = serialDataBuffer.ToString();
-                if (currentData.Contains("}") && IsValidJson(currentData))
-                {
-                    receivedJsonData = currentData;
-                    serialDataBuffer.Clear();
-                    
-                    // 通知主线程处理数据
-                    serialDataReceived.Set();
-                    
-                    // 在UI线程中处理接收到的数据
-                    if (InvokeRequired)
-                    {
-                        Invoke(new Action(() => ProcessReceivedComPortData(receivedJsonData)));
-                    }
-                    else
-                    {
-                        ProcessReceivedComPortData(receivedJsonData);
-                    }
                 }
             }
             catch (Exception ex)
             {
-                if (InvokeRequired)
-                {
-                    Invoke(new Action(() => uiLabel1.Text = "接收数据错误：" + ex.Message));
-                }
-                else
-                {
-                    uiLabel1.Text = "接收数据错误：" + ex.Message;
-                }
+                uiLabel1.Text = "指令下发失败：" + ex.Message;
             }
-        }
-
-        // 检查字符串是否为有效的JSON
-        private bool IsValidJson(string jsonString)
-        {
-            try
-            {
-                JObject.Parse(jsonString);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        // 处理接收到的COM口数据
-        private void ProcessReceivedComPortData(string jsonData)
-        {
-            try
-            {
-                JObject comjs = JObject.Parse(jsonData);
-
-                // 从JSON中获取COM口信息
-                string comPort = "";
-
-                // 尝试多种可能的JSON结构来获取COM口
-                if (comjs["parameterInfo"] != null)
-                {
-                    // 如果parameterInfo中有COM相关信息
-                    if (comjs["parameterInfo"]["com"] != null)
-                    {
-                        if (comjs["parameterInfo"]["com"]["port"] != null)
-                        {
-                            comPort = (string)comjs["parameterInfo"]["com"]["port"];
-                        }
-                        else if (comjs["parameterInfo"]["com"]["name"] != null)
-                        {
-                            comPort = (string)comjs["parameterInfo"]["com"]["name"];
-                        }
-                    }
-                    else if (comjs["parameterInfo"]["serial"] != null)
-                    {
-                        if (comjs["parameterInfo"]["serial"]["port"] != null)
-                        {
-                            comPort = (string)comjs["parameterInfo"]["serial"]["port"];
-                        }
-                    }
-                    else if (comjs["parameterInfo"]["comPort"] != null)
-                    {
-                        comPort = (string)comjs["parameterInfo"]["comPort"];
-                    }
-                }
-                else if (comjs["com"] != null)
-                {
-                    if (comjs["com"]["port"] != null)
-                    {
-                        comPort = (string)comjs["com"]["port"];
-                    }
-                    else if (comjs["com"]["name"] != null)
-                    {
-                        comPort = (string)comjs["com"]["name"];
-                    }
-                }
-                else if (comjs["serial"] != null)
-                {
-                    if (comjs["serial"]["port"] != null)
-                    {
-                        comPort = (string)comjs["serial"]["port"];
-                    }
-                }
-                else if (comjs["comPort"] != null)
-                {
-                    comPort = (string)comjs["comPort"];
-                }
-                else if (comjs["port"] != null)
-                {
-                    comPort = (string)comjs["port"];
-                }
-                else if (comjs["data"] != null && comjs["data"]["comPort"] != null)
-                {
-                    comPort = (string)comjs["data"]["comPort"];
-                }
-
-                // 如果找到了COM口信息
-                if (!string.IsNullOrEmpty(comPort))
-                {
-                    selectedComPort = comPort;
-
-                    // 更新UI显示COM口（如果uiComboBox3存在）
-                    if (uiComboBox3 != null)
-                    {
-                        // 检查COM口是否已在列表中
-                        bool exists = false;
-                        for (int i = 0; i < uiComboBox3.Items.Count; i++)
-                        {
-                            if (uiComboBox3.Items[i].ToString() == comPort)
-                            {
-                                exists = true;
-                                uiComboBox3.SelectedIndex = i;
-                                break;
-                            }
-                        }
-
-                        // 如果不存在，添加到列表并选中
-                        if (!exists)
-                        {
-                            uiComboBox3.Items.Add(comPort);
-                            uiComboBox3.SelectedItem = comPort;
-                        }
-                    }
-
-                    uiLabel1.Text = "已获取COM口：" + comPort;
-                }
-                else
-                {
-                    uiLabel1.Text = "未找到COM口信息，接收到的JSON：" + jsonData;
-                }
-            }
-            catch (Exception ex)
-            {
-                uiLabel1.Text = "解析COM口信息失败：" + ex.Message + "，数据：" + jsonData;
-            }
-        }
-
-        // 获取COM口信息并处理（发送指令并等待从机返回）
-        private void ProcessComPortInfo(string readCom)
-        {
-            try
-            {
-                //获取com口信息
-                byte[] comInfo = Encoding.UTF8.GetBytes(readCom);
-                SendDataViaSerial(comInfo);
-
-                // 等待从机返回数据（最多等待3秒）
-                bool dataReceived = serialDataReceived.WaitOne(3000);
-                
-                if (!dataReceived)
-                {
-                    uiLabel1.Text = "等待从机响应超时";
-                }
-                // 数据接收后会在SerialPort_DataReceived事件中自动处理
-            }
-            catch (Exception ex)
-            {
-                uiLabel1.Text = "获取COM口信息失败：" + ex.Message;
-            }
-        }
-
-        // 获取系统中所有可用的COM口
-        private void LoadAvailableComPorts()
-        {
-            try
-            {
-                string[] ports = SerialPort.GetPortNames();
-                if (uiComboBox3 != null)
-                {
-                    uiComboBox3.DataSource = ports;
-                    if (ports.Length > 0)
-                    {
-                        selectedComPort = ports[0];
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                uiLabel1.Text = "获取COM口列表失败：" + ex.Message;
-            }
-        }
-
-        // 关闭串口连接
-        private void CloseSerialPort()
-        {
-            try
-            {
-                if (serialPort != null)
-                {
-                    // 取消事件订阅
-                    serialPort.DataReceived -= SerialPort_DataReceived;
-                    
-                    if (serialPort.IsOpen)
-                    {
-                        serialPort.Close();
-                    }
-                    serialPort.Dispose();
-                    serialPort = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                // 忽略关闭时的错误
-            }
-        }
-
-        // 窗体关闭时清理资源
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            CloseSerialPort();
-            base.OnFormClosing(e);
         }
     }
 }

@@ -56,6 +56,10 @@
             this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.uiGroupBox1 = new Sunny.UI.UIGroupBox();
+            this.uiCheckBoxGroup1 = new Sunny.UI.UICheckBoxGroup();
+            this.uiButton2 = new Sunny.UI.UIButton();
+            this.uiComboBox3 = new Sunny.UI.UIComboBox();
+            this.uiLabel2 = new Sunny.UI.UILabel();
             this.uiCheckBoxGroup6 = new Sunny.UI.UICheckBoxGroup();
             this.uiComboBox1 = new Sunny.UI.UIComboBox();
             this.uiLabel4 = new Sunny.UI.UILabel();
@@ -73,11 +77,11 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.uiGroupBox2 = new Sunny.UI.UIGroupBox();
-            this.uiButton2 = new Sunny.UI.UIButton();
             this.uiComboBox2 = new Sunny.UI.UIComboBox();
+            this.button11 = new System.Windows.Forms.Button();
             this.uiLabel1 = new Sunny.UI.UILabel();
-            this.uiComboBox3 = new Sunny.UI.UIComboBox();
             this.uiGroupBox1.SuspendLayout();
+            this.uiCheckBoxGroup1.SuspendLayout();
             this.uiCheckBoxGroup6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiDataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -261,7 +265,9 @@
             // 
             // uiGroupBox1
             // 
+            this.uiGroupBox1.Controls.Add(this.uiCheckBoxGroup1);
             this.uiGroupBox1.Controls.Add(this.uiCheckBoxGroup6);
+            this.uiGroupBox1.Controls.Add(this.uiDataGridView1);
             this.uiGroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.uiGroupBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiGroupBox1.Location = new System.Drawing.Point(4, 5);
@@ -269,10 +275,74 @@
             this.uiGroupBox1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiGroupBox1.Name = "uiGroupBox1";
             this.uiGroupBox1.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
-            this.uiGroupBox1.Size = new System.Drawing.Size(1118, 148);
+            this.uiGroupBox1.Size = new System.Drawing.Size(1118, 305);
             this.uiGroupBox1.TabIndex = 2;
             this.uiGroupBox1.Text = null;
             this.uiGroupBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // uiCheckBoxGroup1
+            // 
+            this.uiCheckBoxGroup1.BackColor = System.Drawing.Color.White;
+            this.uiCheckBoxGroup1.Controls.Add(this.uiButton2);
+            this.uiCheckBoxGroup1.Controls.Add(this.uiComboBox3);
+            this.uiCheckBoxGroup1.Controls.Add(this.uiLabel2);
+            this.uiCheckBoxGroup1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiCheckBoxGroup1.Location = new System.Drawing.Point(581, 44);
+            this.uiCheckBoxGroup1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiCheckBoxGroup1.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiCheckBoxGroup1.Name = "uiCheckBoxGroup1";
+            this.uiCheckBoxGroup1.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
+            this.uiCheckBoxGroup1.SelectedIndexes = ((System.Collections.Generic.List<int>)(resources.GetObject("uiCheckBoxGroup1.SelectedIndexes")));
+            this.uiCheckBoxGroup1.Size = new System.Drawing.Size(481, 94);
+            this.uiCheckBoxGroup1.TabIndex = 9;
+            this.uiCheckBoxGroup1.Text = "COM选择";
+            this.uiCheckBoxGroup1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // uiButton2
+            // 
+            this.uiButton2.BackColor = System.Drawing.Color.White;
+            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton2.Location = new System.Drawing.Point(369, 35);
+            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton2.Name = "uiButton2";
+            this.uiButton2.Radius = 10;
+            this.uiButton2.Size = new System.Drawing.Size(97, 30);
+            this.uiButton2.TabIndex = 12;
+            this.uiButton2.Text = "搜索";
+            this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton2.Click += new System.EventHandler(this.uiButton2_Click);
+            // 
+            // uiComboBox3
+            // 
+            this.uiComboBox3.DataSource = null;
+            this.uiComboBox3.DropDownStyle = Sunny.UI.UIDropDownStyle.DropDownList;
+            this.uiComboBox3.FillColor = System.Drawing.Color.White;
+            this.uiComboBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiComboBox3.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
+            this.uiComboBox3.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.uiComboBox3.Location = new System.Drawing.Point(118, 37);
+            this.uiComboBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiComboBox3.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiComboBox3.Name = "uiComboBox3";
+            this.uiComboBox3.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiComboBox3.Size = new System.Drawing.Size(101, 29);
+            this.uiComboBox3.SymbolSize = 24;
+            this.uiComboBox3.TabIndex = 1;
+            this.uiComboBox3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiComboBox3.Watermark = "";
+            // 
+            // uiLabel2
+            // 
+            this.uiLabel2.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel2.Location = new System.Drawing.Point(14, 36);
+            this.uiLabel2.Name = "uiLabel2";
+            this.uiLabel2.Size = new System.Drawing.Size(106, 29);
+            this.uiLabel2.TabIndex = 0;
+            this.uiLabel2.Text = "选择COM：";
+            this.uiLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // uiCheckBoxGroup6
             // 
@@ -411,7 +481,7 @@
             this.uiDataGridView1.EnableHeadersVisualStyles = false;
             this.uiDataGridView1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiDataGridView1.GridColor = System.Drawing.Color.Gray;
-            this.uiDataGridView1.Location = new System.Drawing.Point(20, 35);
+            this.uiDataGridView1.Location = new System.Drawing.Point(20, 167);
             this.uiDataGridView1.Name = "uiDataGridView1";
             this.uiDataGridView1.ReadOnly = true;
             this.uiDataGridView1.RectColor = System.Drawing.Color.Black;
@@ -433,7 +503,7 @@
             this.uiDataGridView1.RowTemplate.Height = 23;
             this.uiDataGridView1.SelectedIndex = -1;
             this.uiDataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.uiDataGridView1.Size = new System.Drawing.Size(742, 119);
+            this.uiDataGridView1.Size = new System.Drawing.Size(759, 122);
             this.uiDataGridView1.Style = Sunny.UI.UIStyle.Custom;
             this.uiDataGridView1.TabIndex = 7;
             // 
@@ -508,7 +578,8 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.10456F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(798, 526);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1127, 682);
             this.tableLayoutPanel1.TabIndex = 7;
             // 
             // flowLayoutPanel1
@@ -519,17 +590,16 @@
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(792, 500);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1121, 656);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
             // uiGroupBox2
             // 
-            this.uiGroupBox2.Controls.Add(this.uiButton2);
             this.uiGroupBox2.Controls.Add(this.uiComboBox2);
-            this.uiGroupBox2.Controls.Add(this.uiDataGridView1);
+            this.uiGroupBox2.Controls.Add(this.button11);
             this.uiGroupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.uiGroupBox2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiGroupBox2.Location = new System.Drawing.Point(4, 163);
+            this.uiGroupBox2.Location = new System.Drawing.Point(4, 320);
             this.uiGroupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiGroupBox2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiGroupBox2.Name = "uiGroupBox2";
@@ -539,21 +609,6 @@
             this.uiGroupBox2.Text = null;
             this.uiGroupBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // uiButton2
-            // 
-            this.uiButton2.BackColor = System.Drawing.Color.White;
-            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton2.Location = new System.Drawing.Point(665, 265);
-            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton2.Name = "uiButton2";
-            this.uiButton2.Radius = 10;
-            this.uiButton2.Size = new System.Drawing.Size(97, 29);
-            this.uiButton2.TabIndex = 13;
-            this.uiButton2.Text = "确认";
-            this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton2.Click += new System.EventHandler(this.uiButton2_Click);
-            // 
             // uiComboBox2
             // 
             this.uiComboBox2.DataSource = null;
@@ -562,16 +617,27 @@
             this.uiComboBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiComboBox2.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox2.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.uiComboBox2.Location = new System.Drawing.Point(499, 201);
+            this.uiComboBox2.Location = new System.Drawing.Point(689, 36);
             this.uiComboBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiComboBox2.MinimumSize = new System.Drawing.Size(63, 0);
             this.uiComboBox2.Name = "uiComboBox2";
             this.uiComboBox2.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
-            this.uiComboBox2.Size = new System.Drawing.Size(263, 29);
+            this.uiComboBox2.Size = new System.Drawing.Size(192, 29);
             this.uiComboBox2.SymbolSize = 24;
-            this.uiComboBox2.TabIndex = 9;
+            this.uiComboBox2.TabIndex = 17;
             this.uiComboBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             this.uiComboBox2.Watermark = "";
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(939, 36);
+            this.button11.Margin = new System.Windows.Forms.Padding(4);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(123, 49);
+            this.button11.TabIndex = 8;
+            this.button11.Text = "指令下发";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // uiLabel1
             // 
@@ -579,42 +645,25 @@
             this.uiLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiLabel1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel1.Location = new System.Drawing.Point(2, 506);
+            this.uiLabel1.Location = new System.Drawing.Point(2, 662);
             this.uiLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uiLabel1.Name = "uiLabel1";
-            this.uiLabel1.Size = new System.Drawing.Size(794, 20);
+            this.uiLabel1.Size = new System.Drawing.Size(1123, 20);
             this.uiLabel1.TabIndex = 6;
             this.uiLabel1.Text = "信息显示";
-            // 
-            // uiComboBox3
-            // 
-            this.uiComboBox3.DataSource = null;
-            this.uiComboBox3.DropDownStyle = Sunny.UI.UIDropDownStyle.DropDownList;
-            this.uiComboBox3.FillColor = System.Drawing.Color.White;
-            this.uiComboBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiComboBox3.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
-            this.uiComboBox3.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.uiComboBox3.Location = new System.Drawing.Point(87, 37);
-            this.uiComboBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiComboBox3.MinimumSize = new System.Drawing.Size(63, 0);
-            this.uiComboBox3.Name = "uiComboBox3";
-            this.uiComboBox3.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
-            this.uiComboBox3.Size = new System.Drawing.Size(114, 29);
-            this.uiComboBox3.SymbolSize = 24;
-            this.uiComboBox3.TabIndex = 1;
-            this.uiComboBox3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiComboBox3.Watermark = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(798, 526);
+            this.ClientSize = new System.Drawing.Size(1127, 682);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.uiGroupBox1.ResumeLayout(false);
+            this.uiCheckBoxGroup1.ResumeLayout(false);
             this.uiCheckBoxGroup6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uiDataGridView1)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -662,13 +711,16 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn19;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn20;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn21;
+        private Sunny.UI.UICheckBoxGroup uiCheckBoxGroup1;
+        private Sunny.UI.UIButton uiButton2;
+        private Sunny.UI.UIComboBox uiComboBox3;
+        private Sunny.UI.UILabel uiLabel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private Sunny.UI.UIGroupBox uiGroupBox2;
         private Sunny.UI.UILabel uiLabel1;
-        private Sunny.UI.UIComboBox uiComboBox3;
+        private System.Windows.Forms.Button button11;
         private Sunny.UI.UIComboBox uiComboBox2;
-        private Sunny.UI.UIButton uiButton2;
     }
 }
 
