@@ -35,7 +35,7 @@ namespace Ethernet_Search
         private string targetDeviceIP = "";  // 目标设备IP（网卡模式）
         private string currentComPort = "";   // 当前COM口（串口模式）
 
-        private string jsonData = ""; // 要发送的JSON数据
+        public string jsonData = ""; // 要发送的JSON数据
 
         private const string READCOM = "{\r\n \"messageId\":\"1718711447026\",\r\n \"parameter\":\"COM\"\r\n }";
 
@@ -46,28 +46,17 @@ namespace Ethernet_Search
         private int comReadTimeout = 3000;
         private int comWriteTimeout = 3000;
 
-        //网口读取接口
-        private Dictionary<string, string> readInterface = new Dictionary<string, string>
-        { };
-
-        //接口映射
-        private Dictionary<string, string> interfaceMap = new Dictionary<string, string>
-        {
-            { "4G", "修改4G参数" },
-            { "Ethernet", "修改Ethernet参数" },
-            { "WiFi", "修改WiFi参数" },
-            { "COM", "修改COM口参数" },
-            { "LoRa", "修改LoRa参数" },
-        };
+        Form4 form4 = new Form4();
+        Form2 form2 = new Form2();
 
         //配置指令集
         private Dictionary<string, string> COMMANDS = new Dictionary<string, string>
         {
-            { "修改4G参数", "{\r\n \"parameterInfo\" : {\r\n \"4G\" : [ {\r\n \"interfaceName\" : \"4G1\",\r\n \"interfacePar\" : {\r\n \"content\" : \"\",\r\n \"username\" : \"\",\r\n \"password\" : \"\",\r\n \"auth\" : 3,\r\n \"ethNetworkSegment\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n说明\r\n在线修改声明，值为1时表示实时生效，\r\n否则修改会失效\r\n25\r\n},\r\n \"parameter\" : \"4G\",\r\n \"messageId\" : \"1718776952659\"\r\n }" },
-            { "修改Ethernet参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n" },
-            { "修改WiFi参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"onlineModification\" : 1,\r\n \"WiFi\" : [ {\r\n \"interfaceName\" : \"WiFi1\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.41\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"FF:FF:FF:FF:FF:FF\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\",\r\n \"username\" : \"yunkenceshi\",\r\n \"password\" : \"yk86557810...\",\r\n \"distributionNetworkEnabled\" : 0\r\n }\r\n } ]\r\n },\r\n \"parameter\" : \"WiFi\",\r\n \"messageId\" : \"1718883684255\"\r\n"},
+            { "", ""},
+            //{ "修改4G参数", "{\r\n \"parameterInfo\" : {\r\n \"4G\" : [ {\r\n \"interfaceName\" : \"4G1\",\r\n \"interfacePar\" : {\r\n \"content\" : \"\",\r\n \"username\" : \"\",\r\n \"password\" : \"\",\r\n \"auth\" : 3,\r\n \"ethNetworkSegment\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n说明\r\n在线修改声明，值为1时表示实时生效，\r\n否则修改会失效\r\n25\r\n},\r\n \"parameter\" : \"4G\",\r\n \"messageId\" : \"1718776952659\"\r\n }" },
+            { "修改Ethernet参数", "{\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n }\r\n" },
+            //{ "修改WiFi参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"onlineModification\" : 1,\r\n \"WiFi\" : [ {\r\n \"interfaceName\" : \"WiFi1\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.41\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"FF:FF:FF:FF:FF:FF\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\",\r\n \"username\" : \"yunkenceshi\",\r\n \"password\" : \"yk86557810...\",\r\n \"distributionNetworkEnabled\" : 0\r\n }\r\n } ]\r\n },\r\n \"parameter\" : \"WiFi\",\r\n \"messageId\" : \"1718883684255\"\r\n"},
             { "修改COM口参数", "{\r\n \"parameterInfo\" : {\r\n \"COM\": [ {\r\n \"interfaceName\" : \"COM2\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"frameBreakTime\" : 0,\r\n \"baudRate\" : 9600,\r\n \"dataBits\" : 8,\r\n \"stopBits\" : 1,\r\n \"parity\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"COM\",\r\n \"messageId\" : \"1718768583565\"\r\n }"},
-            { "修改LoRa参数", ""},
         };
 
 
@@ -378,27 +367,6 @@ namespace Ethernet_Search
                 row.Cells[4].Value = (string)(information["Ethernet1"]?["ip"] ?? information["localIp"]?["ip"]);
                 row.Cells[5].Value = (string)information["product"]?["version"];
                 row.Cells[6].Value = (string)information["product"]?["alias"];
-
-                readInterface.Clear();
-                readInterface.Add("4G", (string)information["interfaces"]["4G"]);
-                readInterface.Add("Ethernet", (string)information["interfaces"]["Ethernet"]);
-                readInterface.Add("WiFi", (string)information["interfaces"]["WiFi"]);
-                readInterface.Add("COM", (string)information["interfaces"]["COM"]);
-                readInterface.Add("LoRa", (string)information["interfaces"]["LoRa"]);
-                readInterface.Add("Zigbee", (string)information["interfaces"]["Zigbee"]);
-                readInterface.Add("Local", (string)information["interfaces"]["Local"]);
-
-                List<string> list = new List<string>
-                { };
-                // 根据读取到的接口信息更新命令列表
-                foreach (string key in readInterface.Keys)
-                {
-                    if (readInterface[key] != "0")
-                    {
-                        list.Add(interfaceMap[key]);
-                    }
-                }
-                uiComboBox2.DataSource = list;
             }
             catch
             {
@@ -490,6 +458,7 @@ namespace Ethernet_Search
             }
             uiComboBox1.DataSource = typeListIP;
 
+            uiComboBox2.DataSource = COMMANDS.Keys.ToList();
         }
 
         static bool IsUdpcRecvStart_ST02 = false;
@@ -552,18 +521,6 @@ namespace Ethernet_Search
         }
         #endregion
 
-        private void uiComboBox4_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string name = uiComboBox4.Text;
-            List<String> typeListIP = new List<string>();
-            string morenips1 = IPinfo[name].ToString();
-            string[] morenips = morenips1.Split('|');
-            for (int i = 0; i < morenips.Count(); i++)
-            {
-                typeListIP.Add(morenips[i]);
-            }
-            uiComboBox1.DataSource = typeListIP;
-        }
 
         // 通过网卡（UDP）发送数据
         private void SendDataViaEthernet(byte[] payload)
@@ -641,150 +598,43 @@ namespace Ethernet_Search
             }
         }
 
+        void setControls(Form f)
+        { 
+            float newX = this.uiPanel1.Width / Convert.ToSingle(f.Width);
+            float newY = this.uiPanel1.Height / Convert.ToSingle(f.Height);
+            setControl(newX, newY, this.uiPanel1);
+        }
+
+        void setControl(float x, float y, Control cons)
+        {
+            foreach (Control con in cons.Controls)
+            {
+                con.Width = Convert.ToInt32(con.Width * x);
+                con.Height = Convert.ToInt32(con.Height * y);
+                con.Left = Convert.ToInt32(con.Left * x);
+                con.Top = Convert.ToInt32(con.Top * y);
+                if (con.Controls.Count > 1)
+                {
+                    setControl(x, y, con);
+                }
+            }
+        }
+
         private void configCom(string value)
         {
             
-
-            using (Form2 form2 = new Form2())
-            {
-                // 显示Form2为模态窗口，等待用户操作
-                if (form2.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        //将 JSON 字符串解析为 JObject
-                        JObject jsonObj = JObject.Parse(value);
-
-                        //更新 JSON 对象中的参数值
-                        jsonObj["parameterInfo"]["COM"][0]["interfaceName"] = form2.Com;
-                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["baudRate"] = form2.BaudRate;
-                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["dataBits"] = form2.DataBits;
-                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["stopBits"] = (int)form2.StopBits;
-                        jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["parity"] = (int)form2.Parity;
-
-                        //将更新后的 JObject 转回 JSON 字符串
-                        jsonData = jsonObj.ToString(Formatting.None);
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-            }
         }
-
-
-        private void config4G(string value)
-        {
-            using (Form3 form3 = new Form3())
-            {
-                // 显示Form3为模态窗口，等待用户操作
-                if (form3.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        //将 JSON 字符串解析为 JObject
-                        JObject jsonObj = JObject.Parse(value);
-
-                        //更新 JSON 对象中的参数值
-                        jsonObj["parameterInfo"]["4G"][0]["interfaceName"] = form3.interfaceName;
-                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["content"] = form3.content;
-                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["username"] = form3.username;
-                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["password"] = form3.password;
-                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["auth"] = form3.auth;
-                        jsonObj["parameterInfo"]["4G"][0]["interfacePar"]["ethNetworkSegment"] = form3.ethNetworkSegment;
-
-                        //将更新后的 JObject 转回 JSON 字符串
-                        jsonData = jsonObj.ToString(Formatting.None);
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-            }
-        }
-
 
         private void configEthernet(string value)
         {
-            using (Form4 form4 = new Form4())
-            {
-                // 显示Form4为模态窗口，等待用户操作
-                if (form4.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        //将 JSON 字符串解析为 JObject
-                        JObject jsonObj = JObject.Parse(value);
-
-                        //更新 JSON 对象中的参数值
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfaceName"] = form4.interfaceName;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dhcp"] = form4.dhcp;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ip"] = form4.ip;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["subnetMask"] = form4.subnetMask;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["mac"] = form4.mac;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns"] = form4.dns;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns2"] = form4.dns2;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ntp"] = form4.ntp;
-                        jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["gateway"] = form4.gateway;
-
-                        //将更新后的 JObject 转回 JSON 字符串
-                        jsonData = jsonObj.ToString(Formatting.None);
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-            }
+            
         }
-
-
-        private void configWiFi(string value)
-        {
-            using (Form5 form5 = new Form5())
-            {
-                // 显示Form5为模态窗口，等待用户操作
-                if (form5.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        //将 JSON 字符串解析为 JObject
-                        JObject jsonObj = JObject.Parse(value);
-
-                        //更新 JSON 对象中的参数值
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfaceName"] = form5.interfaceName;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["dhcp"] = form5.dhcp;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["ip"] = form5.ip;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["subnetMask"] = form5.subnetMask;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["mac"] = form5.mac;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["dns"] = form5.dns;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["dns2"] = form5.dns2;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["ntp"] = form5.ntp;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["gateway"] = form5.gateway;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["username"] = form5.username;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["password"] = form5.password;
-                        jsonObj["parameterInfo"]["WiFi"][0]["interfacePar"]["distributionNetworkEnabled"] = form5.distributionNetworkEnabled;
-
-                        //将更新后的 JObject 转回 JSON 字符串
-                        jsonData = jsonObj.ToString(Formatting.None);
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-            }
-        }
-
 
         private void button11_Click(object sender, EventArgs e)
         {
-            string key = COMMANDS.ElementAt(uiComboBox2.SelectedIndex).Key;
-            string value = COMMANDS.ElementAt(uiComboBox2.SelectedIndex).Value;
-
-            if (key == "修改COM口参数") configCom(value);
-            if (key == "修改Ethernet参数") configEthernet(value);
-            if (key == "修改4G参数") config4G(value);
-            if (key == "修改WiFi参数") configWiFi(value);
-
+            if (form2.isApply)  jsonData = form2.jsonData;
+            else if (form4.isApply) jsonData = form4.jsonData;
+            
             try
             {
                 byte[] payload = Encoding.UTF8.GetBytes(jsonData);
@@ -809,6 +659,39 @@ namespace Ethernet_Search
             catch (Exception ex)
             {
                 uiLabel1.Text = "指令下发失败：" + ex.Message;
+            }
+        } 
+        
+
+        private void uiComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (uiComboBox2.Text == "修改Ethernet参数")
+            {
+                if (!uiPanel1.Contains(form4))
+                {
+                    form4.TopLevel = false;
+                    form4.FormBorderStyle = FormBorderStyle.None;
+                    uiPanel1.Controls.Add(form4);
+                    form4.Show();
+                    form4.BringToFront();
+                }
+                else form4.BringToFront();
+
+                setControls(form4);
+            }
+            else if (uiComboBox2.Text == "修改COM口参数")
+            {
+                if (!uiPanel1.Contains(form2))
+                {
+                    form2.TopLevel = false;
+                    form2.FormBorderStyle = FormBorderStyle.None;
+                    uiPanel1.Controls.Add(form2);
+                    form2.Show();
+                    form2.BringToFront();
+                }
+                else form2.BringToFront();
+
+                setControls(form2);
             }
         }
     }
