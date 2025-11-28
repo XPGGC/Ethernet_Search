@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sunny.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,7 +35,10 @@ namespace Ethernet_Search
         private string targetDeviceIP = "";  // 目标设备IP（网卡模式）
         private string currentComPort = "";   // 当前COM口（串口模式）
 
-        // COM配置参数
+        public string jsonData = ""; // 要发送的JSON数据
+
+        private const string READCOM = "{\r\n \"messageId\":\"1718711447026\",\r\n \"parameter\":\"COM\"\r\n }";
+
         private int comBaudRate = 9600;
         private int comDataBits = 8;
         private StopBits comStopBits = StopBits.One;
@@ -42,19 +46,31 @@ namespace Ethernet_Search
         private int comReadTimeout = 3000;
         private int comWriteTimeout = 3000;
 
+        Form4 form4 = new Form4();
         Form2 form2 = new Form2();
-        private bool isReceiveHexDisplay = false;
-        private bool isSendHexMode = false;
+
+        //配置指令集
+        private Dictionary<string, string> COMMANDS = new Dictionary<string, string>
+        {
+            { "", ""},
+            //{ "修改4G参数", "{\r\n \"parameterInfo\" : {\r\n \"4G\" : [ {\r\n \"interfaceName\" : \"4G1\",\r\n \"interfacePar\" : {\r\n \"content\" : \"\",\r\n \"username\" : \"\",\r\n \"password\" : \"\",\r\n \"auth\" : 3,\r\n \"ethNetworkSegment\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n说明\r\n在线修改声明，值为1时表示实时生效，\r\n否则修改会失效\r\n25\r\n},\r\n \"parameter\" : \"4G\",\r\n \"messageId\" : \"1718776952659\"\r\n }" },
+            { "修改Ethernet参数", "{\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n }\r\n" },
+            //{ "修改WiFi参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"onlineModification\" : 1,\r\n \"WiFi\" : [ {\r\n \"interfaceName\" : \"WiFi1\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.41\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"FF:FF:FF:FF:FF:FF\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\",\r\n \"username\" : \"yunkenceshi\",\r\n \"password\" : \"yk86557810...\",\r\n \"distributionNetworkEnabled\" : 0\r\n }\r\n } ]\r\n },\r\n \"parameter\" : \"WiFi\",\r\n \"messageId\" : \"1718883684255\"\r\n"},
+            { "修改COM口参数", "{\r\n \"parameterInfo\" : {\r\n \"COM\": [ {\r\n \"interfaceName\" : \"COM2\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"frameBreakTime\" : 0,\r\n \"baudRate\" : 9600,\r\n \"dataBits\" : 8,\r\n \"stopBits\" : 1,\r\n \"parity\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"COM\",\r\n \"messageId\" : \"1718768583565\"\r\n }"},
+        };
+
 
         public Form1()
         {
             InitializeComponent();
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             Form1Search_Load();
             GetPort(null, null);
         }
+        
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // 关闭串口
@@ -69,6 +85,8 @@ namespace Ethernet_Search
             TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalMilliseconds).ToString();
         }
+
+
         private void uiButton1_Click(object sender, EventArgs e)
         {
             try
@@ -78,7 +96,6 @@ namespace Ethernet_Search
                 this.uiDataGridView1.Rows.Clear();
                 string SearchIp = uiComboBox1.Text;
 
-               
                 //再扫描S702网关
                 client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
                 endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
@@ -86,8 +103,7 @@ namespace Ethernet_Search
                 String sendMessage1 = "{\"messageId\":\"" + ressss2 + "\",\"parameter\":\"information\"}";
                 byte[] buf2 = Encoding.Default.GetBytes(sendMessage1);
                 client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
-                //textBox4.Text = textBox4.Text.ToString() + "\r\n" + sendMessage1;
-                
+
                 // 设置连接模式为网卡模式
                 currentConnectionMode = ConnectionMode.Ethernet;
             }
@@ -117,13 +133,12 @@ namespace Ethernet_Search
                 // 通过COM口发送查询命令
                 string ressss2 = GetTimeStamp();
                 String sendMessage1 = "{\"messageId\":\"" + ressss2 + "\",\"parameter\":\"information\"}";
-                
+
                 if (serialPort_COM != null && serialPort_COM.IsOpen)
                 {
                     byte[] buf2 = Encoding.UTF8.GetBytes(sendMessage1);
                     serialPort_COM.Write(buf2, 0, buf2.Length);
-                    textBox3.Text = textBox3.Text.ToString() + "\r\n" + sendMessage1;
-                    
+
                     // 设置连接模式为串口模式
                     currentConnectionMode = ConnectionMode.Serial;
                     currentComPort = comPort;
@@ -204,7 +219,7 @@ namespace Ethernet_Search
                     serialPort_COM.Close();
                     serialPort_COM.Dispose();
                 }
-                
+
                 // 创建并配置串口（使用保存的配置参数）
 
                 serialPort_COM = new SerialPort(comPort);
@@ -254,7 +269,7 @@ namespace Ethernet_Search
 
                         // 尝试解析完整的JSON消息（假设以换行符或完整JSON对象结束）
                         string fullMessage = buffer.ToString();
-                        
+
                         // 尝试查找完整的JSON对象
                         int jsonStart = fullMessage.IndexOf('{');
                         if (jsonStart >= 0)
@@ -286,7 +301,7 @@ namespace Ethernet_Search
                                 }
 
                                 // 处理接收到的JSON消息
-                                ProcessReceivedMessage(jsonMessage);
+                                ProcessDeviceInfoMessage(jsonMessage);
                             }
                         }
                     }
@@ -305,60 +320,58 @@ namespace Ethernet_Search
                     // 发生错误，记录但不中断
                     Invoke((new Action(() =>
                     {
-                        textBox3.AppendText("\r\n串口接收错误：" + ex.Message);
                     })));
                     Thread.Sleep(100);
                 }
             }
         }
 
-        // 处理接收到的消息                 
-        private void ProcessReceivedMessage(string message)
+        // 处理网口/串口接收到的消息
+        private void ProcessDeviceInfoMessage(string message)
         {
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrWhiteSpace(message))
                 return;
 
-            Invoke((new Action(() =>
+            if (InvokeRequired)
             {
-                AppendReceivedText(message, true);
+                Invoke(new Action(() => ProcessDeviceInfoMessage(message)));
+                return;
+            }
 
-                try
+            try
+            {
+                if (tb_type != -1)
+                    return;
+
+                JObject jo = JObject.Parse(message);
+                JObject information = null;
+
+                if (jo["parameterInfo"]?["information"] is JObject parameterInfo)
                 {
-                    JObject jo = (JObject)JsonConvert.DeserializeObject(message);
-                    if (tb_type == -1)
-                    {
-                        //扫描网关信息
-                        if (jo.Property("parameterInfo") != null)
-                        {
-                            JObject information = (JObject)jo["parameterInfo"]["information"];
-                            int index = this.uiDataGridView1.Rows.Add();
-                            this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                            this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                            this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                            this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                            this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["Ethernet1"]["ip"];
-                            this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                            this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-                        }
-                        else if (jo.Property("information") != null)
-                        {
-                            JObject information = (JObject)jo["information"];
-                            int index = this.uiDataGridView1.Rows.Add();
-                            this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                            this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                            this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                            this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                            this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["localIp"]["ip"];
-                            this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                            this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-                        }
-                    }
+                    information = parameterInfo;
                 }
-                catch (Exception ex)
+                else if (jo["information"] is JObject info)
                 {
-                    // JSON解析失败，忽略
+                    information = info;
                 }
-            })));
+
+                if (information == null)
+                    return;
+
+                int index = uiDataGridView1.Rows.Add();
+                DataGridViewRow row = uiDataGridView1.Rows[index];
+                row.Cells[0].Value = index;
+                row.Cells[1].Value = (string)information["product"]?["name"];
+                row.Cells[2].Value = (string)information["product"]?["model"];
+                row.Cells[3].Value = (string)information["product"]?["sn"];
+                row.Cells[4].Value = (string)(information["Ethernet1"]?["ip"] ?? information["localIp"]?["ip"]);
+                row.Cells[5].Value = (string)information["product"]?["version"];
+                row.Cells[6].Value = (string)information["product"]?["alias"];
+            }
+            catch
+            {
+                // JSON解析失败，忽略
+            }
         }
 
         // 关闭串口
@@ -444,6 +457,8 @@ namespace Ethernet_Search
                 typeListIP.Add(morenips[i]);
             }
             uiComboBox1.DataSource = typeListIP;
+
+            uiComboBox2.DataSource = COMMANDS.Keys.ToList();
         }
 
         static bool IsUdpcRecvStart_ST02 = false;
@@ -479,7 +494,6 @@ namespace Ethernet_Search
                     thrRecv_ST02 = new Thread(ReceiveMessage_ST021);
                     thrRecv_ST02.Start();
                     IsUdpcRecvStart_ST02 = true;
-                    //MessageBox.Show("UDP监听器已成功启动");
                 }
 
             }
@@ -498,50 +512,7 @@ namespace Ethernet_Search
                 {
                     byte[] bytRecv = udpcRecv_ST02.Receive(ref localIpep_ST02);
                     string message = Encoding.UTF8.GetString(bytRecv, 0, bytRecv.Length);
-                    Invoke((new Action(() =>
-                    {
-
-                        AppendReceivedText(message, false);
-
-                        JObject jo = (JObject)JsonConvert.DeserializeObject(message);
-                        try
-                        {
-                            if (tb_type == -1)
-                            {
-                                //扫描网关信息
-                                if (jo.Property("parameterInfo") != null)
-                                {
-                                    JObject information = (JObject)jo["parameterInfo"]["information"];
-                                    int index = this.uiDataGridView1.Rows.Add();
-                                    this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                                    this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                                    this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                                    this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                                    this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["Ethernet1"]["ip"];
-                                    this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                                    this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-
-                                }
-                                else if (jo.Property("information") != null)
-                                {
-                                    JObject information = (JObject)jo["information"];
-                                    int index = this.uiDataGridView1.Rows.Add();
-                                    this.uiDataGridView1.Rows[index].Cells[0].Value = index;
-                                    this.uiDataGridView1.Rows[index].Cells[1].Value = (string)information["product"]["name"];
-                                    this.uiDataGridView1.Rows[index].Cells[2].Value = (string)information["product"]["model"];
-                                    this.uiDataGridView1.Rows[index].Cells[3].Value = (string)information["product"]["sn"];
-                                    this.uiDataGridView1.Rows[index].Cells[4].Value = (string)information["localIp"]["ip"];
-                                    this.uiDataGridView1.Rows[index].Cells[5].Value = (string)information["product"]["version"];
-                                    this.uiDataGridView1.Rows[index].Cells[6].Value = (string)information["product"]["alias"];
-
-                                }
-                            }
-                           
-                        }
-                        catch (Exception ex)
-                        {
-                        }
-                    })));
+                    ProcessDeviceInfoMessage(message);
                 }
                 catch (Exception ex)
                 {
@@ -550,93 +521,6 @@ namespace Ethernet_Search
         }
         #endregion
 
-        private void uiComboBox4_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string name = uiComboBox4.Text;
-            List<String> typeListIP = new List<string>();
-            //textBox1.Text = IPinfo[name];
-            string morenips1 = IPinfo[name].ToString();
-            string[] morenips = morenips1.Split('|');
-            for (int i = 0; i < morenips.Count(); i++)
-            {
-                typeListIP.Add(morenips[i]);
-            }
-            uiComboBox1.DataSource = typeListIP;
-        }
-
-        private void uiComboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            textBox4.Text = "";
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            textBox3.Text = "";
-        }
-
-        private void button11_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string payloadSource = textBox4.Text.Trim();
-                
-                if (string.IsNullOrEmpty(payloadSource))
-                {
-                    uiLabel1.Text = isSendHexMode ? "请输入要发送的Hex数据" : "请输入要发送的JSON数据";
-                    return;
-                }
-
-                byte[] payload;
-                if (isSendHexMode)
-                {
-                    if (!TryConvertHexInput(payloadSource, out payload, out string hexError))
-                    {
-                        uiLabel1.Text = hexError;
-                        return;
-                    }
-                }
-                else
-                {
-                    // 验证JSON格式
-                    try
-                    {
-                        JObject.Parse(payloadSource);
-                    }
-                    catch
-                    {
-                        uiLabel1.Text = "JSON格式错误，请检查数据格式";
-                        return;
-                    }
-                    payload = Encoding.UTF8.GetBytes(payloadSource);
-                }
-
-                // 根据连接模式发送数据
-                if (currentConnectionMode == ConnectionMode.Ethernet)
-                {
-                    // 网卡模式：通过UDP发送
-                    SendDataViaEthernet(payload);
-                }
-                else if (currentConnectionMode == ConnectionMode.Serial)
-                {
-                    // COM口模式：通过串口发送
-                    SendDataViaSerial(payload);
-                }
-                else
-                {
-                    uiLabel1.Text = "请先进行设备搜索（网卡或COM）";
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                uiLabel1.Text = "指令下发失败：" + ex.Message;
-            }
-        }
 
         // 通过网卡（UDP）发送数据
         private void SendDataViaEthernet(byte[] payload)
@@ -654,19 +538,10 @@ namespace Ethernet_Search
                     }
                 }
 
-                // 如果没有选中设备或IP为空，使用广播
+                // 如果没有选中设备或IP为空
                 if (string.IsNullOrEmpty(targetDeviceIP))
                 {
-                    // 使用广播发送
-                    if (client_ST02 == null || endpoint_ST02 == null)
-                    {
-                        string SearchIp = uiComboBox1.Text;
-                        client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
-                        endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);
-                    }
-                    
-                    client_ST02.Send(payload, payload.Length, endpoint_ST02);
-                    uiLabel1.Text = "指令已通过UDP广播发送";
+                    uiLabel1.Text = "没有选中设备或IP为空";
                 }
                 else
                 {
@@ -676,11 +551,12 @@ namespace Ethernet_Search
                         string SearchIp = uiComboBox1.Text;
                         client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
                     }
-                    
+
                     IPEndPoint targetEndpoint = new IPEndPoint(IPAddress.Parse(targetDeviceIP), 2020);
                     client_ST02.Send(payload, payload.Length, targetEndpoint);
                     uiLabel1.Text = "指令已发送到设备：" + targetDeviceIP;
                 }
+
             }
             catch (Exception ex)
             {
@@ -722,126 +598,101 @@ namespace Ethernet_Search
             }
         }
 
-        private void uiButton5_Click(object sender, EventArgs e)
+        void setControls(Form f)
+        { 
+            float newX = this.uiPanel1.Width / Convert.ToSingle(f.Width);
+            float newY = this.uiPanel1.Height / Convert.ToSingle(f.Height);
+            setControl(newX, newY, this.uiPanel1);
+        }
+
+        void setControl(float x, float y, Control cons)
         {
-            if (uiComboBox3.SelectedItem == null)
+            foreach (Control con in cons.Controls)
             {
-                MessageBox.Show("请先选择一个COM口！");
-                return; // 如果没有选择，则直接返回，不打开配置窗口
-            }
-
-            using (Form2 form2 = new Form2())
-            {
-                // 显示Form2为模态窗口，等待用户操作
-                if (form2.ShowDialog() == DialogResult.OK)
+                con.Width = Convert.ToInt32(con.Width * x);
+                con.Height = Convert.ToInt32(con.Height * y);
+                con.Left = Convert.ToInt32(con.Left * x);
+                con.Top = Convert.ToInt32(con.Top * y);
+                if (con.Controls.Count > 1)
                 {
-                    // 从Form2的公共属性获取配置并更新Form1的参数
-                    comBaudRate = form2.BaudRate;
-                    comDataBits = form2.DataBits;
-                    comStopBits = form2.StopBits;
-                    comParity = form2.Parity;
-
-                    // 重新初始化串口（如果已打开则先关闭）
-                    if (serialPort_COM != null && serialPort_COM.IsOpen)
-                    {
-                        serialPort_COM.Close();
-                        serialPort_COM.Dispose();
-                    }
+                    setControl(x, y, con);
                 }
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void configCom(string value)
         {
-            isReceiveHexDisplay = checkBox1.Checked;
-            uiLabel1.Text = isReceiveHexDisplay ? "接收区使用Hex显示" : "接收区使用文本显示";
+            
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void configEthernet(string value)
         {
-            isSendHexMode = checkBox2.Checked;
-            uiLabel1.Text = isSendHexMode ? "指令将按Hex发送" : "指令将按文本发送";
+            
         }
 
-        private void AppendReceivedText(string message, bool appendNewLine)
+        private void button11_Click(object sender, EventArgs e)
         {
-            string formatted = FormatReceivedMessage(message);
-            if (appendNewLine)
+            if (form2.isApply)  jsonData = form2.jsonData;
+            else if (form4.isApply) jsonData = form4.jsonData;
+            
+            try
             {
-                textBox3.AppendText(formatted + Environment.NewLine);
-            }
-            else
-            {
-                textBox3.AppendText(formatted);
-            }
-        }
+                byte[] payload = Encoding.UTF8.GetBytes(jsonData);
 
-        private string FormatReceivedMessage(string message)
-        {
-            if (string.IsNullOrEmpty(message))
-            {
-                return string.Empty;
-            }
-
-            if (!isReceiveHexDisplay)
-            {
-                return message;
-            }
-
-            byte[] bytes = Encoding.UTF8.GetBytes(message);
-            return BitConverter.ToString(bytes).Replace("-", " ");
-        }
-
-        private bool TryConvertHexInput(string input, out byte[] payload, out string error)
-        {
-            payload = null;
-            error = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                error = "请输入要发送的Hex数据";
-                return false;
-            }
-
-            string sanitized = input.Replace("0x", "").Replace("0X", "");
-            sanitized = sanitized.Replace(",", "").Replace(";", "");
-            sanitized = sanitized.Replace("\r", "").Replace("\n", "").Replace("\t", "").Replace(" ", "");
-
-            if (sanitized.Length == 0)
-            {
-                error = "请输入合法的Hex数据";
-                return false;
-            }
-
-            if (sanitized.Length % 2 != 0)
-            {
-                error = "Hex数据长度必须为偶数";
-                return false;
-            }
-
-            for (int i = 0; i < sanitized.Length; i++)
-            {
-                if (!Uri.IsHexDigit(sanitized[i]))
+                // 根据连接模式发送数据
+                if (currentConnectionMode == ConnectionMode.Ethernet)
                 {
-                    error = "包含非法字符，无法解析Hex数据";
-                    return false;
+                    // 网卡模式：通过UDP发送
+                    SendDataViaEthernet(payload);
+                }
+                else if (currentConnectionMode == ConnectionMode.Serial)
+                {
+                    // COM口模式：通过串口发送
+                    SendDataViaSerial(payload);
+                }
+                else
+                {
+                    uiLabel1.Text = "请先进行设备搜索（网卡或COM）";
+                    return;
                 }
             }
-
-            int byteCount = sanitized.Length / 2;
-            payload = new byte[byteCount];
-            for (int i = 0; i < byteCount; i++)
+            catch (Exception ex)
             {
-                string byteValue = sanitized.Substring(i * 2, 2);
-                if (!byte.TryParse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out payload[i]))
-                {
-                    error = "Hex数据解析失败";
-                    payload = null;
-                    return false;
-                }
+                uiLabel1.Text = "指令下发失败：" + ex.Message;
             }
+        } 
+        
 
-            return true;
+        private void uiComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (uiComboBox2.Text == "修改Ethernet参数")
+            {
+                if (!uiPanel1.Contains(form4))
+                {
+                    form4.TopLevel = false;
+                    form4.FormBorderStyle = FormBorderStyle.None;
+                    uiPanel1.Controls.Add(form4);
+                    form4.Show();
+                    form4.BringToFront();
+                }
+                else form4.BringToFront();
+
+                setControls(form4);
+            }
+            else if (uiComboBox2.Text == "修改COM口参数")
+            {
+                if (!uiPanel1.Contains(form2))
+                {
+                    form2.TopLevel = false;
+                    form2.FormBorderStyle = FormBorderStyle.None;
+                    uiPanel1.Controls.Add(form2);
+                    form2.Show();
+                    form2.BringToFront();
+                }
+                else form2.BringToFront();
+
+                setControls(form2);
+            }
         }
     }
 }

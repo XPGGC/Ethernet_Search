@@ -5,31 +5,29 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Ethernet_Search
-{
-    public partial class Form2 : Form
+{   
+    public partial class Form4 : Form
     {
-        public  string Com { get; private set; }
-        public int BaudRate { get; private set; }
-        public int DataBits { get; private set; }
-        public StopBits StopBits { get; private set; }
-        public Parity Parity { get; private set; }
+        public string interfaceName = "";
+        public string dhcp = "";
+        public string ip = "";
+        public string subnetMask = "";
+        public string mac = "";
+        public string dns = "";
+        public string dns2 = "";
+        public string ntp = "";
+        public string gateway = "";
         public string jsonData = "";
 
-        private List<int> comBaudRate = new List<int>();
-        private List<int> comDataBits = new List<int>();
-        private List<StopBits> comStopBits = new List<StopBits>();
-        private List<Parity> comParity = new List<Parity>();
-        private List<string> coms = new List<string>();
-
-        public bool isApply = false;
         public bool isRemove = false;
+        public bool isApply = false;
 
         //配置指令集
         private Dictionary<string, string> COMMANDS = new Dictionary<string, string>
@@ -41,51 +39,9 @@ namespace Ethernet_Search
             { "修改COM口参数", "{\r\n \"parameterInfo\" : {\r\n \"COM\": [ {\r\n \"interfaceName\" : \"COM2\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"frameBreakTime\" : 0,\r\n \"baudRate\" : 9600,\r\n \"dataBits\" : 8,\r\n \"stopBits\" : 1,\r\n \"parity\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"COM\",\r\n \"messageId\" : \"1718768583565\"\r\n }"},
         };
 
-
-        public Form2()
+        public Form4()
         {
             InitializeComponent();
-        }
-
-        private void Form2_Load(object sender, EventArgs e)
-        {
-            comConfig(null, null);
-        }
-
-        private void comConfig(object sender, EventArgs e)
-        {
-            coms.Add("COM1");
-            coms.Add("COM2");
-
-            comBaudRate.Add(1200);
-            comBaudRate.Add(2400);
-            comBaudRate.Add(4800);
-            comBaudRate.Add(9600);
-            comBaudRate.Add(19200);
-            comBaudRate.Add(38400);
-            comBaudRate.Add(57600);
-
-            comDataBits.Add(7);
-            comDataBits.Add(8);
-
-            comStopBits.Add(StopBits.One);
-            comStopBits.Add(StopBits.Two);
-
-            comParity.Add(Parity.None);
-            comParity.Add(Parity.Odd);
-            comParity.Add(Parity.Even);
-
-            uiComboBox5.DataSource = coms;
-            uiComboBox1.DataSource = comBaudRate;
-            uiComboBox2.DataSource = comDataBits;
-            uiComboBox3.DataSource = comStopBits;
-            uiComboBox4.DataSource = comParity;
-
-            Com = "COM1";
-            BaudRate = 1200;
-            DataBits = 7;
-            StopBits = StopBits.None;
-            Parity = Parity.None;
         }
 
         private void uiButton2_Click(object sender, EventArgs e)
@@ -95,21 +51,29 @@ namespace Ethernet_Search
 
         private void uiButton1_Click(object sender, EventArgs e)
         {
-            Com = (string)uiComboBox5.SelectedItem;
-            BaudRate = (int)uiComboBox1.SelectedItem;
-            DataBits = (int)uiComboBox2.SelectedItem;
-            StopBits = (StopBits)uiComboBox3.SelectedItem;
-            Parity = (Parity)uiComboBox4.SelectedItem;
+            interfaceName = textBox1.Text;
+            dhcp = textBox2.Text;
+            ip = textBox3.Text;
+            subnetMask = textBox4.Text;
+            mac = textBox5.Text;
+            dns = textBox6.Text;
+            dns2 = textBox7.Text;
+            ntp = textBox8.Text;
+            gateway = textBox9.Text;
 
             //将 JSON 字符串解析为 JObject
-            JObject jsonObj = JObject.Parse(COMMANDS["修改COM口参数"]);
+            JObject jsonObj = JObject.Parse(COMMANDS["修改Ethernet参数"]);
 
             //更新 JSON 对象中的参数值
-            jsonObj["parameterInfo"]["COM"][0]["interfaceName"] = Com;
-            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["baudRate"] = BaudRate;
-            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["dataBits"] = DataBits;
-            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["stopBits"] = (int)StopBits;
-            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["parity"] = (int)Parity;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfaceName"] = interfaceName;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dhcp"] = dhcp;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ip"] = ip;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["subnetMask"] = subnetMask;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["mac"] = mac;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns"] = dns;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns2"] = dns2;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ntp"] = ntp;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["gateway"] = gateway;
 
             //将更新后的 JObject 转回 JSON 字符串
             jsonData = jsonObj.ToString(Formatting.None);
