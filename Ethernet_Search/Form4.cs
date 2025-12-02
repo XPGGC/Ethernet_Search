@@ -6,27 +6,31 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Ethernet_Search
 {   
     public partial class Form4 : Form
     {
-        public string interfaceName = "";
-        public string dhcp = "";
-        public string ip = "";
-        public string subnetMask = "";
-        public string mac = "";
-        public string dns = "";
+        public string ip1 = "";
+        public string subnetMask1 = "";
+        public string dns1 = "";
+        public string dns21 = "";
+        public string gateway1 = "";
+
+        public string ip2 = "";
+        public string subnetMask2 = "";
         public string dns2 = "";
-        public string ntp = "";
-        public string gateway = "";
+        public string dns22 = "";
+        public string gateway2 = "";
+
         public string jsonData = "";
 
-        public bool isRemove = false;
         public bool isApply = false;
 
         //配置指令集
@@ -44,42 +48,29 @@ namespace Ethernet_Search
             InitializeComponent();
         }
 
-        private void uiButton2_Click(object sender, EventArgs e)
-        {
-            isRemove = true;
-        }
-
         private void uiButton1_Click(object sender, EventArgs e)
         {
-            interfaceName = textBox1.Text;
-            dhcp = textBox2.Text;
-            ip = textBox3.Text;
-            subnetMask = textBox4.Text;
-            mac = textBox5.Text;
-            dns = textBox6.Text;
-            dns2 = textBox7.Text;
-            ntp = textBox8.Text;
-            gateway = textBox9.Text;
+            ip1 = uiTextBox3.Text;
+            subnetMask1 = uiTextBox4.Text;
+            dns1 = uiTextBox6.Text;
+            dns21 = uiTextBox7.Text;
+            gateway1 = uiTextBox9.Text;
 
             //将 JSON 字符串解析为 JObject
             JObject jsonObj = JObject.Parse(COMMANDS["修改Ethernet参数"]);
 
             //更新 JSON 对象中的参数值
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfaceName"] = interfaceName;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dhcp"] = dhcp;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ip"] = ip;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["subnetMask"] = subnetMask;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["mac"] = mac;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns"] = dns;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns2"] = dns2;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ntp"] = ntp;
-            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["gateway"] = gateway;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfaceName"] = "Ethernet1";
+            if (uiTextBox3.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ip"] = ip1;
+            if (uiTextBox4.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["subnetMask"] = subnetMask1;
+            if (uiTextBox6.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns"] = dns1;
+            if (uiTextBox7.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["dns2"] = dns21;
+            if (uiTextBox9.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["gateway"] = gateway1;
 
             //将更新后的 JObject 转回 JSON 字符串
             jsonData = jsonObj.ToString(Formatting.None);
 
             isApply = true;
-            isRemove = true;
         }
     }
 }

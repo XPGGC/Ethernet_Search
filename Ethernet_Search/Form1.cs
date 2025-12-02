@@ -52,7 +52,6 @@ namespace Ethernet_Search
         //配置指令集
         private Dictionary<string, string> COMMANDS = new Dictionary<string, string>
         {
-            { "", ""},
             //{ "修改4G参数", "{\r\n \"parameterInfo\" : {\r\n \"4G\" : [ {\r\n \"interfaceName\" : \"4G1\",\r\n \"interfacePar\" : {\r\n \"content\" : \"\",\r\n \"username\" : \"\",\r\n \"password\" : \"\",\r\n \"auth\" : 3,\r\n \"ethNetworkSegment\" : 0\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n说明\r\n在线修改声明，值为1时表示实时生效，\r\n否则修改会失效\r\n25\r\n},\r\n \"parameter\" : \"4G\",\r\n \"messageId\" : \"1718776952659\"\r\n }" },
             { "修改Ethernet参数", "{\r\n \"parameterInfo\" : {\r\n \"Ethernet\" : [ {\r\n \"interfaceName\" : \"Ethernet1\",\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.158\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"02:00:00:32:A1:91\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\"\r\n }\r\n } ],\r\n \"onlineModification\" : 1\r\n },\r\n \"parameter\" : \"Ethernet\",\r\n \"messageId\" : \"1718780046192\"\r\n }\r\n" },
             //{ "修改WiFi参数", "{\r\n }\r\n \"parameterInfo\" : {\r\n \"onlineModification\" : 1,\r\n \"WiFi\" : [ {\r\n \"interfaceName\" : \"WiFi1\",\r\n \"workMode\" : 0,\r\n \"interfacePar\" : {\r\n \"dhcp\" : 0,\r\n \"ip\" : \"192.168.0.41\",\r\n \"subnetMask\" : \"255.255.255.0\",\r\n \"mac\" : \"FF:FF:FF:FF:FF:FF\",\r\n \"dns\" : \"114.114.114.114\",\r\n \"dns2\" : \"8.8.8.8\",\r\n \"ntp\" : \"ntp.ntsc.ac.cn\",\r\n \"gateway\" : \"192.168.0.1\",\r\n \"username\" : \"yunkenceshi\",\r\n \"password\" : \"yk86557810...\",\r\n \"distributionNetworkEnabled\" : 0\r\n }\r\n } ]\r\n },\r\n \"parameter\" : \"WiFi\",\r\n \"messageId\" : \"1718883684255\"\r\n"},
@@ -503,7 +502,6 @@ namespace Ethernet_Search
             }
         }
 
-
         private void ReceiveMessage_ST021(object obj)
         {
             while (IsUdpcRecvStart_ST02)
@@ -598,70 +596,43 @@ namespace Ethernet_Search
             }
         }
 
-        void setControls(Form f)
-        { 
-            float newX = this.uiPanel1.Width / Convert.ToSingle(f.Width);
-            float newY = this.uiPanel1.Height / Convert.ToSingle(f.Height);
-            setControl(newX, newY, this.uiPanel1);
-        }
 
-        void setControl(float x, float y, Control cons)
+        private void uiButton3_Click(object sender, EventArgs e)
         {
-            foreach (Control con in cons.Controls)
+            if (form2.isApply | form4.isApply)
             {
-                con.Width = Convert.ToInt32(con.Width * x);
-                con.Height = Convert.ToInt32(con.Height * y);
-                con.Left = Convert.ToInt32(con.Left * x);
-                con.Top = Convert.ToInt32(con.Top * y);
-                if (con.Controls.Count > 1)
+                if (form2.isApply) { jsonData = form2.jsonData; form2.isApply = false; }
+                else if (form4.isApply) { jsonData = form4.jsonData; form4.isApply = false;
+                }
+
+                try
                 {
-                    setControl(x, y, con);
+                    byte[] payload = Encoding.UTF8.GetBytes(jsonData);
+
+                    // 根据连接模式发送数据
+                    if (currentConnectionMode == ConnectionMode.Ethernet)
+                    {
+                        // 网卡模式：通过UDP发送
+                        SendDataViaEthernet(payload);
+                    }
+                    else if (currentConnectionMode == ConnectionMode.Serial)
+                    {
+                        // COM口模式：通过串口发送
+                        SendDataViaSerial(payload);
+                    }
+                    else
+                    {
+                        uiLabel1.Text = "请先进行设备搜索（网卡或COM）";
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    uiLabel1.Text = "指令下发失败：" + ex.Message;
                 }
             }
-        }
-
-        private void configCom(string value)
-        {
-            
-        }
-
-        private void configEthernet(string value)
-        {
-            
-        }
-
-        private void button11_Click(object sender, EventArgs e)
-        {
-            if (form2.isApply)  jsonData = form2.jsonData;
-            else if (form4.isApply) jsonData = form4.jsonData;
-            
-            try
-            {
-                byte[] payload = Encoding.UTF8.GetBytes(jsonData);
-
-                // 根据连接模式发送数据
-                if (currentConnectionMode == ConnectionMode.Ethernet)
-                {
-                    // 网卡模式：通过UDP发送
-                    SendDataViaEthernet(payload);
-                }
-                else if (currentConnectionMode == ConnectionMode.Serial)
-                {
-                    // COM口模式：通过串口发送
-                    SendDataViaSerial(payload);
-                }
-                else
-                {
-                    uiLabel1.Text = "请先进行设备搜索（网卡或COM）";
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                uiLabel1.Text = "指令下发失败：" + ex.Message;
-            }
+            else MessageBox.Show("请点击确定按钮，确定发送指令");
         } 
-        
 
         private void uiComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -674,10 +645,9 @@ namespace Ethernet_Search
                     uiPanel1.Controls.Add(form4);
                     form4.Show();
                     form4.BringToFront();
+                    form4.Visible = true;
                 }
-                else form4.BringToFront();
-
-                setControls(form4);
+                else form4.BringToFront(); form4.Visible = true;
             }
             else if (uiComboBox2.Text == "修改COM口参数")
             {
@@ -688,11 +658,15 @@ namespace Ethernet_Search
                     uiPanel1.Controls.Add(form2);
                     form2.Show();
                     form2.BringToFront();
+                    form2.Visible = true;
                 }
-                else form2.BringToFront();
-
-                setControls(form2);
+                else form2.BringToFront(); form2.Visible = true;
             }
+            //else if (uiComboBox2.Text == "")
+            //{
+            //    form2.Visible = false;
+            //    form4.Visible = false;
+            //}
         }
     }
 }
