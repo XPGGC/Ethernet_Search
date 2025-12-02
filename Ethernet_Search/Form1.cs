@@ -38,24 +38,37 @@ namespace Ethernet_Search
         private const string readCom = "{\r\n \"messageId\":\"1718711447026\",\r\n \"parameter\":\"COM\"\r\n }";
         private const string readEthernet = "{\r\n  \"messageId\" : \"1718711447026\",\r\n \"parameter\" : \"Ethernet\"\r\n }\r\n";
 
-        // 接收网关信息
-        JObject information = null;
-        JObject ethernetInfo = null;
-        JObject comInfo = null;
-
         private string ip1 = "";
         private string subnetMask1 = "";
         private string gateway1 = "";
 
+        private int frameBreakTime1;
         private int BaudRate1;
         private int DataBits1;
         private StopBits StopBits1;
         private Parity Parity1;
+        private int frameBreakTime2;
         private int BaudRate2;
         private int DataBits2;
         private StopBits StopBits2;
         private Parity Parity2;
 
+        private string nowFrameBreakTime1;
+        private string nowBaudRate1;
+        private string nowDataBits1;
+        private string nowStopBits1;
+        private string nowParity1;
+        private string nowFrameBreakTime2;
+        private string nowBaudRate2;
+        private string nowDataBits2;
+        private string nowStopBits2;
+        private string nowParity2;
+
+        private string nowIp1;
+        private string nowSubnetMask1;
+        private string nowGateway1;
+
+        private List<int> frameBreakTimeList = new List<int> { 0, 1, 2, 4, 5};
         private List<int> comBaudRate = new List<int>();
         private List<int> comDataBits = new List<int>();
         private List<StopBits> comStopBits = new List<StopBits>();
@@ -95,7 +108,7 @@ namespace Ethernet_Search
             try
             {
                 tb_type = -1;
-                ST02_udp2020(); //启动监听2020端口
+                ST02_udp2020();
                 this.uiDataGridView1.Rows.Clear();
                 string SearchIp = uiComboBox1.Text;
 
@@ -103,7 +116,7 @@ namespace Ethernet_Search
                 client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
                 endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
                 string ressss2 = GetTimeStamp();
-                String sendMessage1 = "{\"messageId\":\"" + ressss2 + "\",\"parameter\":\"information\"}";
+                String sendMessage1 = "{\"messageId\":\"1764663895676\",\"parameter\":\"information\"}";
                 byte[] buf2 = Encoding.Default.GetBytes(sendMessage1);
                 client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
 
@@ -229,6 +242,8 @@ namespace Ethernet_Search
                         if (string.IsNullOrWhiteSpace(message))
                             return;
 
+                        JObject information = null;
+
                         try
                         {
                             if (tb_type != -1)
@@ -245,16 +260,24 @@ namespace Ethernet_Search
                             {
                                 information = info;
                             }
-                            else if (jo["parameterInfo"]?["Ethernet"] is JObject ethernet)
-                            {
-                                ethernetInfo = ethernet;
-                            }
-                            else if (jo["parameterInfo"]?["COM"] is JObject com)
-                            {
-                                comInfo = com;
-                            }
 
-                            if (information == null | ethernetInfo == null | comInfo == null)
+                            nowBaudRate1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["baudRate"];
+                            nowDataBits1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["dataBits"];
+                            nowStopBits1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["stopBits"];
+                            nowParity1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["parity"];
+                            nowFrameBreakTime1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["frameBreakTime"];
+
+                            nowBaudRate2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["baudRate"];
+                            nowDataBits2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["dataBits"];
+                            nowStopBits2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["stopBits"];
+                            nowParity2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["parity"];
+
+                            nowIp1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["ip"];
+                            nowSubnetMask1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["subnetMask"];
+                            nowGateway1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["gateway"];
+                            nowFrameBreakTime2 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["frameBreakTime"];
+
+                            if (information == null)
                                 return;
 
                             // 将读取到的网关信息进行显示
@@ -356,11 +379,13 @@ namespace Ethernet_Search
             comParity.Add(Parity.Odd);
             comParity.Add(Parity.Even);
 
+            uiComboBox10.DataSource = frameBreakTimeList;
             uiComboBox11.DataSource = comBaudRate;
             uiComboBox5.DataSource = comDataBits;
             uiComboBox3.DataSource = comStopBits;
             uiComboBox2.DataSource = comParity;
 
+            uiComboBox12.DataSource = frameBreakTimeList;
             uiComboBox9.DataSource = comBaudRate;
             uiComboBox8.DataSource = comDataBits;
             uiComboBox7.DataSource = comStopBits;
@@ -409,16 +434,18 @@ namespace Ethernet_Search
 
         private void uiButton5_Click(object sender, EventArgs e)
         {
-            BaudRate1 = (int)uiComboBox11.SelectedItem;
-            DataBits1 = (int)uiComboBox5.SelectedItem;
-            StopBits1 = (StopBits)uiComboBox3.SelectedItem;
-            Parity1 = (Parity)uiComboBox2.SelectedItem;
+            frameBreakTime1 = int.Parse(uiComboBox10.Text);
+            BaudRate1 = int.Parse(uiComboBox11.Text);
+            DataBits1 = int.Parse(uiComboBox5.Text);
+            StopBits1 = (StopBits)Enum.Parse(typeof(StopBits), uiComboBox3.Text);
+            Parity1 = (Parity)Enum.Parse(typeof(Parity), uiComboBox2.Text);
 
             //将 JSON 字符串解析为 JObject
             JObject jsonObj = JObject.Parse(COMMANDS["修改COM口参数"]);
 
             //更新 JSON 对象中的参数值
             jsonObj["parameterInfo"]["COM"][0]["interfaceName"] = "COM1";
+            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["frameBreakTime"] = frameBreakTime1;
             jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["baudRate"] = BaudRate1;
             jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["dataBits"] = DataBits1;
             jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["stopBits"] = (int)StopBits1;
@@ -451,16 +478,18 @@ namespace Ethernet_Search
 
         private void uiButton4_Click(object sender, EventArgs e)
         {
-            BaudRate2 = (int)uiComboBox9.SelectedItem;
-            DataBits2 = (int)uiComboBox8.SelectedItem;
-            StopBits2 = (StopBits)uiComboBox7.SelectedItem;
-            Parity2 = (Parity)uiComboBox6.SelectedItem;
+            frameBreakTime2 = int.Parse(uiComboBox12.Text);
+            BaudRate2 = int.Parse(uiComboBox9.Text);
+            DataBits2 = int.Parse(uiComboBox8.Text);
+            StopBits2 = (StopBits)Enum.Parse(typeof(StopBits), uiComboBox7.Text);
+            Parity2 = (Parity)Enum.Parse(typeof(Parity), uiComboBox6.Text);
 
             //将 JSON 字符串解析为 JObject
             JObject jsonObj = JObject.Parse(COMMANDS["修改COM口参数"]);
 
             //更新 JSON 对象中的参数值
             jsonObj["parameterInfo"]["COM"][0]["interfaceName"] = "COM2";
+            jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["frameBreakTime"] = frameBreakTime2;
             jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["baudRate"] = BaudRate2;
             jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["dataBits"] = DataBits2;
             jsonObj["parameterInfo"]["COM"][0]["interfacePar"]["stopBits"] = (int)StopBits2;
@@ -493,20 +522,38 @@ namespace Ethernet_Search
 
         private void uiButton2_Click(object sender, EventArgs e)
         {
+            ST02_udp2020();
             string SearchIp = uiComboBox1.Text;
             client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
             endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
-            byte[] buf2 = Encoding.Default.GetBytes("{\"messageId\":\"1764689539311\",\"parameter\":\"information\"}");
+            byte[] buf2 = Encoding.Default.GetBytes(readCom);
             client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
+
+            uiComboBox10.Text = nowFrameBreakTime1;
+            uiComboBox11.Text = nowBaudRate1;
+            uiComboBox5.Text = nowDataBits1;
+            uiComboBox3.Text = nowStopBits1;
+            uiComboBox2.Text = nowParity1;
+
+            uiComboBox12.Text = nowFrameBreakTime2;
+            uiComboBox9.Text = nowBaudRate2;
+            uiComboBox8.Text = nowDataBits2;
+            uiComboBox7.Text = nowStopBits2;
+            uiComboBox6.Text = nowParity2;
         }
 
         private void uiButton6_Click(object sender, EventArgs e)
         {
+            ST02_udp2020();
             string SearchIp = uiComboBox1.Text;
             client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
             endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
             byte[] buf2 = Encoding.Default.GetBytes(readEthernet);
             client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
+
+            uiTextBox3.Text = nowIp1;
+            uiTextBox4.Text = nowSubnetMask1;
+            uiTextBox9.Text = nowGateway1;
         }
     }
 }
