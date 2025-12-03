@@ -68,6 +68,15 @@ namespace Ethernet_Search
         private string nowSubnetMask1;
         private string nowGateway1;
 
+        private string receiveMessage; 
+
+        // 数据接收缓冲区
+        private StringBuilder recvBuffer = new StringBuilder();
+        // 定时器用于判断数据接收完成
+        private System.Timers.Timer dataReceiveTimer;
+        // 超时时间（毫秒，根据设备响应速度调整）
+        private const int RECEIVE_TIMEOUT = 50;
+
         private List<int> frameBreakTimeList = new List<int> { 0, 1, 2, 4, 5};
         private List<int> comBaudRate = new List<int>();
         private List<int> comDataBits = new List<int>();
@@ -90,6 +99,8 @@ namespace Ethernet_Search
         private void Form1_Load(object sender, EventArgs e)
         {
             Form1Search_Load();
+            dataReceiveTimer = new System.Timers.Timer(RECEIVE_TIMEOUT);
+            dataReceiveTimer.Elapsed += DataReceiveTimer_Elapsed; // 超时事件
         }
         
 
@@ -227,6 +238,80 @@ namespace Ethernet_Search
             }
         }
 
+        void ProcessReceivedMessage(string message)
+        {
+            if (string.IsNullOrWhiteSpace(message))
+                return;
+
+            JObject information = null;
+
+            try
+            {
+                if (tb_type != -1)
+                    return;
+
+                JObject jo = JObject.Parse(message);
+
+                // 接收信息的分类判断
+                if (jo["parameterInfo"]?["information"] is JObject parameterInfo)
+                {
+                    information = parameterInfo;
+                }
+                else if (jo["information"] is JObject info)
+                {
+                    information = info;
+                }
+
+                nowBaudRate1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["baudRate"];
+                nowDataBits1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["dataBits"];
+                nowStopBits1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["stopBits"];
+                nowParity1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["parity"];
+                nowFrameBreakTime1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["frameBreakTime"];
+
+                nowBaudRate2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["baudRate"];
+                nowDataBits2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["dataBits"];
+                nowStopBits2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["stopBits"];
+                nowParity2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["parity"];
+
+                nowIp1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["ip"];
+                nowSubnetMask1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["subnetMask"];
+                nowGateway1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["gateway"];
+                nowFrameBreakTime2 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["frameBreakTime"];
+
+                if (information == null)
+                    return;
+
+                // 将读取到的网关信息进行显示
+                int index = uiDataGridView1.Rows.Add();
+                DataGridViewRow row = uiDataGridView1.Rows[index];
+                row.Cells[0].Value = index;
+                row.Cells[1].Value = (string)information["product"]?["name"];
+                row.Cells[2].Value = (string)information["product"]?["model"];
+                row.Cells[3].Value = (string)information["product"]?["sn"];
+                row.Cells[4].Value = (string)(information["Ethernet1"]?["ip"] ?? information["localIp"]?["ip"]);
+                row.Cells[5].Value = (string)information["product"]?["version"];
+                row.Cells[6].Value = (string)information["product"]?["alias"];
+            }
+            catch
+            {
+                // JSON解析失败，忽略
+            }
+        }
+
+        private void DataReceiveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Invoke(new Action(() =>
+            {
+                if (recvBuffer.Length > 0)
+                {
+                    string fullMessage = recvBuffer.ToString();
+                    recvBuffer.Clear(); // 清空缓冲区
+
+                    ProcessReceivedMessage(fullMessage);
+                }
+            }));
+        }
+
         // 接收端口信息
         private void ReceiveMessage_ST021(object obj)
         {
@@ -235,67 +320,13 @@ namespace Ethernet_Search
                 try
                 {
                     byte[] bytRecv = udpcRecv_ST02.Receive(ref localIpep_ST02);
-                    string message = Encoding.UTF8.GetString(bytRecv, 0, bytRecv.Length);
-                    
-                    Invoke(new Action(() => 
-                    {
-                        if (string.IsNullOrWhiteSpace(message))
-                            return;
+                    receiveMessage = Encoding.UTF8.GetString(bytRecv, 0, bytRecv.Length);
 
-                        JObject information = null;
-
-                        try
-                        {
-                            if (tb_type != -1)
-                                return;
-
-                            JObject jo = JObject.Parse(message);
-
-                            // 接收信息的分类判断
-                            if (jo["parameterInfo"]?["information"] is JObject parameterInfo)
-                            {
-                                information = parameterInfo;
-                            }
-                            else if (jo["information"] is JObject info)
-                            {
-                                information = info;
-                            }
-
-                            nowBaudRate1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["baudRate"];
-                            nowDataBits1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["dataBits"];
-                            nowStopBits1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["stopBits"];
-                            nowParity1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["parity"];
-                            nowFrameBreakTime1 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["frameBreakTime"];
-
-                            nowBaudRate2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["baudRate"];
-                            nowDataBits2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["dataBits"];
-                            nowStopBits2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["stopBits"];
-                            nowParity2 = (string)jo["parameterInfo"]?["COM"]?[1]?["interfacePar"]?["parity"];
-
-                            nowIp1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["ip"];
-                            nowSubnetMask1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["subnetMask"];
-                            nowGateway1 = (string)jo["parameterInfo"]?["Ethernet"]?[0]?["interfacePar"]?["gateway"];
-                            nowFrameBreakTime2 = (string)jo["parameterInfo"]?["COM"]?[0]?["interfacePar"]?["frameBreakTime"];
-
-                            if (information == null)
-                                return;
-
-                            // 将读取到的网关信息进行显示
-                            int index = uiDataGridView1.Rows.Add();
-                            DataGridViewRow row = uiDataGridView1.Rows[index];
-                            row.Cells[0].Value = index;
-                            row.Cells[1].Value = (string)information["product"]?["name"];
-                            row.Cells[2].Value = (string)information["product"]?["model"];
-                            row.Cells[3].Value = (string)information["product"]?["sn"];
-                            row.Cells[4].Value = (string)(information["Ethernet1"]?["ip"] ?? information["localIp"]?["ip"]);
-                            row.Cells[5].Value = (string)information["product"]?["version"];
-                            row.Cells[6].Value = (string)information["product"]?["alias"];
-                        }
-                        catch
-                        {
-                            // JSON解析失败，忽略
-                        }
-                    }));
+                    // 数据存入缓冲区
+                    recvBuffer.Append(receiveMessage);
+                    // 重置定时器（若正在运行则停止后重启）
+                    dataReceiveTimer.Stop();
+                    dataReceiveTimer.Start();
                 }
                 catch (Exception ex)
                 {
@@ -526,8 +557,8 @@ namespace Ethernet_Search
             string SearchIp = uiComboBox1.Text;
             client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
             endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
-            byte[] buf2 = Encoding.Default.GetBytes(readCom);
-            client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
+            byte[] buf3 = Encoding.Default.GetBytes(readCom);
+            client_ST02.Send(buf3, buf3.Length, endpoint_ST02);
 
             uiComboBox10.Text = nowFrameBreakTime1;
             uiComboBox11.Text = nowBaudRate1;
@@ -548,8 +579,8 @@ namespace Ethernet_Search
             string SearchIp = uiComboBox1.Text;
             client_ST02 = new UdpClient(new IPEndPoint(Dns.GetHostAddresses(SearchIp)[0], 0));
             endpoint_ST02 = new IPEndPoint(IPAddress.Broadcast, 2020);//IPEndPoint endpoint2
-            byte[] buf2 = Encoding.Default.GetBytes(readEthernet);
-            client_ST02.Send(buf2, buf2.Length, endpoint_ST02);
+            byte[] buf4 = Encoding.Default.GetBytes(readEthernet);
+            client_ST02.Send(buf4, buf4.Length, endpoint_ST02);
 
             uiTextBox3.Text = nowIp1;
             uiTextBox4.Text = nowSubnetMask1;

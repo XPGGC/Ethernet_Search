@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,7 +55,10 @@
             this.dataGridViewTextBoxColumn12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.uiGroupBox1 = new Sunny.UI.UIGroupBox();
+            this.uiButton6 = new Sunny.UI.UIButton();
+            this.uiButton2 = new Sunny.UI.UIButton();
             this.uiCheckBoxGroup6 = new Sunny.UI.UICheckBoxGroup();
             this.uiComboBox1 = new Sunny.UI.UIComboBox();
             this.uiLabel4 = new Sunny.UI.UILabel();
@@ -70,13 +73,13 @@
             this.dataGridViewTextBoxColumn19 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn20 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn21 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.uiLabel1 = new Sunny.UI.UILabel();
             this.uiGroupBox2 = new Sunny.UI.UIGroupBox();
-            this.uiButton2 = new Sunny.UI.UIButton();
-            this.uiButton6 = new Sunny.UI.UIButton();
             this.uiCheckBoxGroup3 = new Sunny.UI.UICheckBoxGroup();
+            this.uiLabel7 = new Sunny.UI.UILabel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.uiComboBox12 = new Sunny.UI.UIComboBox();
+            this.uiLabel6 = new Sunny.UI.UILabel();
             this.uiLabel10 = new Sunny.UI.UILabel();
             this.uiLabel11 = new Sunny.UI.UILabel();
             this.uiLabel12 = new Sunny.UI.UILabel();
@@ -85,8 +88,12 @@
             this.uiComboBox8 = new Sunny.UI.UIComboBox();
             this.uiLabel13 = new Sunny.UI.UILabel();
             this.uiComboBox9 = new Sunny.UI.UIComboBox();
+            this.uiButton3 = new Sunny.UI.UIButton();
+            this.uiButton4 = new Sunny.UI.UIButton();
             this.uiCheckBoxGroup2 = new Sunny.UI.UICheckBoxGroup();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.uiComboBox10 = new Sunny.UI.UIComboBox();
+            this.uiLabel2 = new Sunny.UI.UILabel();
             this.uiLabel15 = new Sunny.UI.UILabel();
             this.uiLabel16 = new Sunny.UI.UILabel();
             this.uiLabel17 = new Sunny.UI.UILabel();
@@ -103,19 +110,13 @@
             this.uiLabel5 = new Sunny.UI.UILabel();
             this.uiLabel8 = new Sunny.UI.UILabel();
             this.uiTextBox9 = new Sunny.UI.UITextBox();
-            this.uiButton4 = new Sunny.UI.UIButton();
             this.uiButton5 = new Sunny.UI.UIButton();
-            this.uiButton3 = new Sunny.UI.UIButton();
-            this.uiLabel1 = new Sunny.UI.UILabel();
-            this.uiLabel2 = new Sunny.UI.UILabel();
-            this.uiComboBox10 = new Sunny.UI.UIComboBox();
-            this.uiLabel6 = new Sunny.UI.UILabel();
-            this.uiComboBox12 = new Sunny.UI.UIComboBox();
+            this.uiLabel9 = new Sunny.UI.UILabel();
+            this.uiLabel14 = new Sunny.UI.UILabel();
+            this.tableLayoutPanel1.SuspendLayout();
             this.uiGroupBox1.SuspendLayout();
             this.uiCheckBoxGroup6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiDataGridView1)).BeginInit();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
             this.uiGroupBox2.SuspendLayout();
             this.uiCheckBoxGroup3.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -299,40 +300,112 @@
             this.dataGridViewTextBoxColumn14.Name = "dataGridViewTextBoxColumn14";
             this.dataGridViewTextBoxColumn14.ReadOnly = true;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.uiGroupBox1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.uiLabel1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.uiGroupBox2, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.6087F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.3913F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1062, 580);
+            this.tableLayoutPanel1.TabIndex = 7;
+            // 
             // uiGroupBox1
             // 
+            this.uiGroupBox1.AutoSize = true;
+            this.uiGroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.uiGroupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.uiGroupBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("uiGroupBox1.BackgroundImage")));
+            this.uiGroupBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.uiGroupBox1.Controls.Add(this.uiButton6);
+            this.uiGroupBox1.Controls.Add(this.uiButton2);
             this.uiGroupBox1.Controls.Add(this.uiCheckBoxGroup6);
             this.uiGroupBox1.Controls.Add(this.uiDataGridView1);
-            this.uiGroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.uiGroupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiGroupBox1.FillColorGradient = true;
+            this.uiGroupBox1.FillColorGradientDirection = System.Windows.Forms.FlowDirection.LeftToRight;
             this.uiGroupBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiGroupBox1.Location = new System.Drawing.Point(4, 5);
-            this.uiGroupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiGroupBox1.Location = new System.Drawing.Point(0, 0);
+            this.uiGroupBox1.Margin = new System.Windows.Forms.Padding(0);
             this.uiGroupBox1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiGroupBox1.Name = "uiGroupBox1";
+            this.uiGroupBox1.Opacity = ((byte)(1));
             this.uiGroupBox1.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
-            this.uiGroupBox1.Size = new System.Drawing.Size(1118, 288);
+            this.uiGroupBox1.RectDisableColor = System.Drawing.Color.LightGray;
+            this.uiGroupBox1.RectSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.None;
+            this.uiGroupBox1.Size = new System.Drawing.Size(1062, 261);
             this.uiGroupBox1.TabIndex = 2;
             this.uiGroupBox1.Text = null;
             this.uiGroupBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // uiButton6
+            // 
+            this.uiButton6.BackColor = System.Drawing.Color.Transparent;
+            this.uiButton6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton6.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.uiButton6.FillColorGradient = true;
+            this.uiButton6.FillColorGradientDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.uiButton6.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.uiButton6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton6.Location = new System.Drawing.Point(865, 202);
+            this.uiButton6.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton6.Name = "uiButton6";
+            this.uiButton6.Radius = 37;
+            this.uiButton6.Size = new System.Drawing.Size(159, 37);
+            this.uiButton6.TabIndex = 14;
+            this.uiButton6.Text = "获取Ethernet信息";
+            this.uiButton6.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton6.Click += new System.EventHandler(this.uiButton6_Click);
+            // 
+            // uiButton2
+            // 
+            this.uiButton2.BackColor = System.Drawing.Color.Transparent;
+            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.uiButton2.FillColorGradient = true;
+            this.uiButton2.FillColorGradientDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.uiButton2.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton2.Location = new System.Drawing.Point(865, 147);
+            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton2.Name = "uiButton2";
+            this.uiButton2.Radius = 37;
+            this.uiButton2.Size = new System.Drawing.Size(159, 37);
+            this.uiButton2.TabIndex = 13;
+            this.uiButton2.Text = "获取COM信息";
+            this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton2.Click += new System.EventHandler(this.uiButton2_Click);
+            // 
             // uiCheckBoxGroup6
             // 
-            this.uiCheckBoxGroup6.BackColor = System.Drawing.Color.White;
+            this.uiCheckBoxGroup6.BackColor = System.Drawing.Color.Transparent;
+            this.uiCheckBoxGroup6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("uiCheckBoxGroup6.BackgroundImage")));
+            this.uiCheckBoxGroup6.CheckBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
             this.uiCheckBoxGroup6.Controls.Add(this.uiComboBox1);
             this.uiCheckBoxGroup6.Controls.Add(this.uiLabel4);
             this.uiCheckBoxGroup6.Controls.Add(this.uiButton1);
             this.uiCheckBoxGroup6.Controls.Add(this.uiComboBox4);
             this.uiCheckBoxGroup6.Controls.Add(this.uiLabel18);
             this.uiCheckBoxGroup6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiCheckBoxGroup6.Location = new System.Drawing.Point(20, 37);
+            this.uiCheckBoxGroup6.Location = new System.Drawing.Point(20, 6);
             this.uiCheckBoxGroup6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiCheckBoxGroup6.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiCheckBoxGroup6.Name = "uiCheckBoxGroup6";
             this.uiCheckBoxGroup6.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
+            this.uiCheckBoxGroup6.Radius = 10;
+            this.uiCheckBoxGroup6.RectSize = 2;
             this.uiCheckBoxGroup6.SelectedIndexes = ((System.Collections.Generic.List<int>)(resources.GetObject("uiCheckBoxGroup6.SelectedIndexes")));
             this.uiCheckBoxGroup6.Size = new System.Drawing.Size(553, 94);
             this.uiCheckBoxGroup6.TabIndex = 8;
-            this.uiCheckBoxGroup6.Text = "网卡选择";
+            this.uiCheckBoxGroup6.Text = null;
             this.uiCheckBoxGroup6.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // uiComboBox1
@@ -370,11 +443,17 @@
             // 
             this.uiButton1.BackColor = System.Drawing.Color.White;
             this.uiButton1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.uiButton1.FillColorGradient = true;
+            this.uiButton1.FillColorGradientDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.uiButton1.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.uiButton1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiButton1.Location = new System.Drawing.Point(442, 37);
             this.uiButton1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton1.Name = "uiButton1";
             this.uiButton1.Radius = 10;
+            this.uiButton1.RadiusSides = Sunny.UI.UICornerRadiusSides.None;
+            this.uiButton1.RectHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.uiButton1.Size = new System.Drawing.Size(97, 29);
             this.uiButton1.TabIndex = 12;
             this.uiButton1.Text = "搜索";
@@ -417,20 +496,20 @@
             // 
             this.uiDataGridView1.AllowUserToAddRows = false;
             this.uiDataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
-            this.uiDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.uiDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.uiDataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.uiDataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.uiDataGridView1.BackgroundColor = System.Drawing.Color.White;
             this.uiDataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.uiDataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.uiDataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.uiDataGridView1.ColumnHeadersHeight = 32;
             this.uiDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.uiDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -441,41 +520,44 @@
             this.dataGridViewTextBoxColumn19,
             this.dataGridViewTextBoxColumn20,
             this.dataGridViewTextBoxColumn21});
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.uiDataGridView1.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.uiDataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             this.uiDataGridView1.EnableHeadersVisualStyles = false;
             this.uiDataGridView1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiDataGridView1.GridColor = System.Drawing.Color.Gray;
-            this.uiDataGridView1.Location = new System.Drawing.Point(20, 152);
+            this.uiDataGridView1.Location = new System.Drawing.Point(20, 117);
             this.uiDataGridView1.Name = "uiDataGridView1";
             this.uiDataGridView1.ReadOnly = true;
             this.uiDataGridView1.RectColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.uiDataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.uiDataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.uiDataGridView1.RowHeadersWidth = 62;
-            dataGridViewCellStyle15.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiDataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiDataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle5;
             this.uiDataGridView1.RowTemplate.Height = 23;
+            this.uiDataGridView1.ScrollBarBackColor = System.Drawing.Color.White;
+            this.uiDataGridView1.ScrollBarColor = System.Drawing.Color.Black;
+            this.uiDataGridView1.ScrollBarRectColor = System.Drawing.Color.Black;
+            this.uiDataGridView1.ScrollBarStyleInherited = false;
             this.uiDataGridView1.SelectedIndex = -1;
             this.uiDataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.uiDataGridView1.Size = new System.Drawing.Size(759, 122);
-            this.uiDataGridView1.Style = Sunny.UI.UIStyle.Custom;
+            this.uiDataGridView1.Size = new System.Drawing.Size(747, 122);
             this.uiDataGridView1.TabIndex = 7;
             // 
             // dataGridViewTextBoxColumn15
@@ -536,100 +618,78 @@
             this.dataGridViewTextBoxColumn21.Name = "dataGridViewTextBoxColumn21";
             this.dataGridViewTextBoxColumn21.ReadOnly = true;
             // 
-            // tableLayoutPanel1
+            // uiLabel1
             // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 89.83287F));
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.uiLabel1, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.10456F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1089, 647);
-            this.tableLayoutPanel1.TabIndex = 7;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Highlight;
-            this.flowLayoutPanel1.Controls.Add(this.uiGroupBox1);
-            this.flowLayoutPanel1.Controls.Add(this.uiGroupBox2);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1083, 621);
-            this.flowLayoutPanel1.TabIndex = 0;
+            this.uiLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiLabel1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel1.Location = new System.Drawing.Point(0, 559);
+            this.uiLabel1.Margin = new System.Windows.Forms.Padding(0);
+            this.uiLabel1.Name = "uiLabel1";
+            this.uiLabel1.Size = new System.Drawing.Size(1062, 21);
+            this.uiLabel1.TabIndex = 6;
+            this.uiLabel1.Text = "信息显示";
             // 
             // uiGroupBox2
             // 
-            this.uiGroupBox2.Controls.Add(this.uiButton2);
-            this.uiGroupBox2.Controls.Add(this.uiButton6);
+            this.uiGroupBox2.BackColor = System.Drawing.Color.Transparent;
+            this.uiGroupBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("uiGroupBox2.BackgroundImage")));
+            this.uiGroupBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.uiGroupBox2.Controls.Add(this.uiLabel14);
+            this.uiGroupBox2.Controls.Add(this.uiLabel9);
+            this.uiGroupBox2.Controls.Add(this.uiLabel7);
             this.uiGroupBox2.Controls.Add(this.uiCheckBoxGroup3);
+            this.uiGroupBox2.Controls.Add(this.uiButton3);
+            this.uiGroupBox2.Controls.Add(this.uiButton4);
             this.uiGroupBox2.Controls.Add(this.uiCheckBoxGroup2);
             this.uiGroupBox2.Controls.Add(this.uiCheckBoxGroup1);
-            this.uiGroupBox2.Controls.Add(this.uiButton4);
             this.uiGroupBox2.Controls.Add(this.uiButton5);
-            this.uiGroupBox2.Controls.Add(this.uiButton3);
+            this.uiGroupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiGroupBox2.FillColorGradient = true;
             this.uiGroupBox2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiGroupBox2.Location = new System.Drawing.Point(4, 303);
-            this.uiGroupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiGroupBox2.Location = new System.Drawing.Point(0, 261);
+            this.uiGroupBox2.Margin = new System.Windows.Forms.Padding(0);
             this.uiGroupBox2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiGroupBox2.Name = "uiGroupBox2";
+            this.uiGroupBox2.Opacity = ((byte)(1));
             this.uiGroupBox2.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
-            this.uiGroupBox2.Size = new System.Drawing.Size(1119, 364);
+            this.uiGroupBox2.RectSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.None;
+            this.uiGroupBox2.Size = new System.Drawing.Size(1062, 298);
             this.uiGroupBox2.TabIndex = 8;
             this.uiGroupBox2.Text = null;
             this.uiGroupBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // uiButton2
-            // 
-            this.uiButton2.BackColor = System.Drawing.Color.White;
-            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton2.Location = new System.Drawing.Point(548, 272);
-            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton2.Name = "uiButton2";
-            this.uiButton2.Radius = 10;
-            this.uiButton2.Size = new System.Drawing.Size(107, 37);
-            this.uiButton2.TabIndex = 13;
-            this.uiButton2.Text = "获取COM信息";
-            this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton2.Click += new System.EventHandler(this.uiButton2_Click);
-            // 
-            // uiButton6
-            // 
-            this.uiButton6.BackColor = System.Drawing.Color.White;
-            this.uiButton6.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton6.Location = new System.Drawing.Point(158, 272);
-            this.uiButton6.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton6.Name = "uiButton6";
-            this.uiButton6.Radius = 10;
-            this.uiButton6.Size = new System.Drawing.Size(146, 37);
-            this.uiButton6.TabIndex = 14;
-            this.uiButton6.Text = "获取Ethernet信息";
-            this.uiButton6.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton6.Click += new System.EventHandler(this.uiButton6_Click);
-            // 
             // uiCheckBoxGroup3
             // 
-            this.uiCheckBoxGroup3.BackColor = System.Drawing.Color.White;
+            this.uiCheckBoxGroup3.BackColor = System.Drawing.Color.Transparent;
+            this.uiCheckBoxGroup3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("uiCheckBoxGroup3.BackgroundImage")));
+            this.uiCheckBoxGroup3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.uiCheckBoxGroup3.Controls.Add(this.tableLayoutPanel3);
+            this.uiCheckBoxGroup3.FillColorGradient = true;
             this.uiCheckBoxGroup3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiCheckBoxGroup3.Location = new System.Drawing.Point(761, 37);
+            this.uiCheckBoxGroup3.Location = new System.Drawing.Point(716, 37);
             this.uiCheckBoxGroup3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiCheckBoxGroup3.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiCheckBoxGroup3.Name = "uiCheckBoxGroup3";
             this.uiCheckBoxGroup3.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
+            this.uiCheckBoxGroup3.Radius = 10;
+            this.uiCheckBoxGroup3.RectSize = 2;
             this.uiCheckBoxGroup3.SelectedIndexes = ((System.Collections.Generic.List<int>)(resources.GetObject("uiCheckBoxGroup3.SelectedIndexes")));
-            this.uiCheckBoxGroup3.Size = new System.Drawing.Size(288, 217);
+            this.uiCheckBoxGroup3.Size = new System.Drawing.Size(320, 217);
             this.uiCheckBoxGroup3.TabIndex = 27;
-            this.uiCheckBoxGroup3.Text = "COM2";
+            this.uiCheckBoxGroup3.Text = null;
             this.uiCheckBoxGroup3.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // uiLabel7
+            // 
+            this.uiLabel7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel7.Location = new System.Drawing.Point(761, 15);
+            this.uiLabel7.Name = "uiLabel7";
+            this.uiLabel7.Size = new System.Drawing.Size(62, 28);
+            this.uiLabel7.TabIndex = 15;
+            this.uiLabel7.Text = "COM2";
             // 
             // tableLayoutPanel3
             // 
@@ -647,7 +707,7 @@
             this.tableLayoutPanel3.Controls.Add(this.uiComboBox8, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.uiLabel13, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.uiComboBox9, 1, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(28, 35);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(42, 35);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 5;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -657,6 +717,38 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(240, 169);
             this.tableLayoutPanel3.TabIndex = 24;
+            // 
+            // uiComboBox12
+            // 
+            this.uiComboBox12.DataSource = null;
+            this.uiComboBox12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiComboBox12.FillColor = System.Drawing.Color.White;
+            this.uiComboBox12.Font = new System.Drawing.Font("微软雅黑", 10.5F);
+            this.uiComboBox12.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
+            this.uiComboBox12.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.uiComboBox12.Location = new System.Drawing.Point(101, 137);
+            this.uiComboBox12.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiComboBox12.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiComboBox12.Name = "uiComboBox12";
+            this.uiComboBox12.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiComboBox12.Radius = 1;
+            this.uiComboBox12.Size = new System.Drawing.Size(135, 27);
+            this.uiComboBox12.SymbolSize = 24;
+            this.uiComboBox12.TabIndex = 9;
+            this.uiComboBox12.Text = "uiComboBox12";
+            this.uiComboBox12.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiComboBox12.Watermark = "";
+            // 
+            // uiLabel6
+            // 
+            this.uiLabel6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.uiLabel6.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel6.Location = new System.Drawing.Point(3, 139);
+            this.uiLabel6.Name = "uiLabel6";
+            this.uiLabel6.Size = new System.Drawing.Size(91, 23);
+            this.uiLabel6.TabIndex = 8;
+            this.uiLabel6.Text = "断帧时间";
             // 
             // uiLabel10
             // 
@@ -696,7 +788,7 @@
             this.uiComboBox6.DataSource = null;
             this.uiComboBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox6.FillColor = System.Drawing.Color.White;
-            this.uiComboBox6.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox6.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.uiComboBox6.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox6.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox6.Location = new System.Drawing.Point(101, 104);
@@ -717,7 +809,7 @@
             this.uiComboBox7.DataSource = null;
             this.uiComboBox7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox7.FillColor = System.Drawing.Color.White;
-            this.uiComboBox7.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox7.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.uiComboBox7.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox7.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox7.Location = new System.Drawing.Point(101, 71);
@@ -737,7 +829,7 @@
             this.uiComboBox8.DataSource = null;
             this.uiComboBox8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox8.FillColor = System.Drawing.Color.White;
-            this.uiComboBox8.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox8.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.uiComboBox8.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox8.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox8.Location = new System.Drawing.Point(101, 38);
@@ -768,7 +860,7 @@
             this.uiComboBox9.DataSource = null;
             this.uiComboBox9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox9.FillColor = System.Drawing.Color.White;
-            this.uiComboBox9.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox9.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.uiComboBox9.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox9.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox9.Location = new System.Drawing.Point(101, 5);
@@ -783,20 +875,63 @@
             this.uiComboBox9.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             this.uiComboBox9.Watermark = "";
             // 
+            // uiButton3
+            // 
+            this.uiButton3.BackColor = System.Drawing.Color.Transparent;
+            this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton3.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.uiButton3.FillColorGradient = true;
+            this.uiButton3.FillColorGradientDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.uiButton3.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton3.Location = new System.Drawing.Point(300, 260);
+            this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton3.Name = "uiButton3";
+            this.uiButton3.Radius = 10;
+            this.uiButton3.RadiusSides = Sunny.UI.UICornerRadiusSides.None;
+            this.uiButton3.Size = new System.Drawing.Size(80, 35);
+            this.uiButton3.TabIndex = 20;
+            this.uiButton3.Text = "确定";
+            this.uiButton3.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton3.Click += new System.EventHandler(this.uiButton3_Click);
+            // 
+            // uiButton4
+            // 
+            this.uiButton4.BackColor = System.Drawing.Color.Transparent;
+            this.uiButton4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton4.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.uiButton4.FillColorGradient = true;
+            this.uiButton4.FillColorGradientDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.uiButton4.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.uiButton4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton4.Location = new System.Drawing.Point(956, 260);
+            this.uiButton4.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton4.Name = "uiButton4";
+            this.uiButton4.Radius = 10;
+            this.uiButton4.RadiusSides = Sunny.UI.UICornerRadiusSides.None;
+            this.uiButton4.Size = new System.Drawing.Size(80, 35);
+            this.uiButton4.TabIndex = 23;
+            this.uiButton4.Text = "确定";
+            this.uiButton4.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton4.Click += new System.EventHandler(this.uiButton4_Click);
+            // 
             // uiCheckBoxGroup2
             // 
-            this.uiCheckBoxGroup2.BackColor = System.Drawing.Color.White;
+            this.uiCheckBoxGroup2.BackColor = System.Drawing.Color.Transparent;
+            this.uiCheckBoxGroup2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("uiCheckBoxGroup2.BackgroundImage")));
+            this.uiCheckBoxGroup2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.uiCheckBoxGroup2.Controls.Add(this.tableLayoutPanel4);
             this.uiCheckBoxGroup2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiCheckBoxGroup2.Location = new System.Drawing.Point(411, 37);
+            this.uiCheckBoxGroup2.Location = new System.Drawing.Point(387, 37);
             this.uiCheckBoxGroup2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiCheckBoxGroup2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiCheckBoxGroup2.Name = "uiCheckBoxGroup2";
             this.uiCheckBoxGroup2.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
+            this.uiCheckBoxGroup2.Radius = 10;
+            this.uiCheckBoxGroup2.RectSize = 2;
             this.uiCheckBoxGroup2.SelectedIndexes = ((System.Collections.Generic.List<int>)(resources.GetObject("uiCheckBoxGroup2.SelectedIndexes")));
             this.uiCheckBoxGroup2.Size = new System.Drawing.Size(320, 217);
             this.uiCheckBoxGroup2.TabIndex = 26;
-            this.uiCheckBoxGroup2.Text = "COM1";
             this.uiCheckBoxGroup2.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel4
@@ -825,6 +960,38 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(240, 169);
             this.tableLayoutPanel4.TabIndex = 22;
+            // 
+            // uiComboBox10
+            // 
+            this.uiComboBox10.DataSource = null;
+            this.uiComboBox10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiComboBox10.FillColor = System.Drawing.Color.White;
+            this.uiComboBox10.Font = new System.Drawing.Font("微软雅黑", 10.5F);
+            this.uiComboBox10.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
+            this.uiComboBox10.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.uiComboBox10.Location = new System.Drawing.Point(99, 137);
+            this.uiComboBox10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiComboBox10.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiComboBox10.Name = "uiComboBox10";
+            this.uiComboBox10.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiComboBox10.Radius = 1;
+            this.uiComboBox10.Size = new System.Drawing.Size(137, 27);
+            this.uiComboBox10.SymbolSize = 24;
+            this.uiComboBox10.TabIndex = 9;
+            this.uiComboBox10.Text = "uiComboBox10";
+            this.uiComboBox10.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiComboBox10.Watermark = "";
+            // 
+            // uiLabel2
+            // 
+            this.uiLabel2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.uiLabel2.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel2.Location = new System.Drawing.Point(3, 139);
+            this.uiLabel2.Name = "uiLabel2";
+            this.uiLabel2.Size = new System.Drawing.Size(89, 23);
+            this.uiLabel2.TabIndex = 8;
+            this.uiLabel2.Text = "断帧时间";
             // 
             // uiLabel15
             // 
@@ -864,7 +1031,7 @@
             this.uiComboBox2.DataSource = null;
             this.uiComboBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox2.FillColor = System.Drawing.Color.White;
-            this.uiComboBox2.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox2.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.uiComboBox2.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox2.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox2.Location = new System.Drawing.Point(99, 104);
@@ -885,7 +1052,7 @@
             this.uiComboBox3.DataSource = null;
             this.uiComboBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox3.FillColor = System.Drawing.Color.White;
-            this.uiComboBox3.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox3.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.uiComboBox3.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox3.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox3.Location = new System.Drawing.Point(99, 71);
@@ -905,7 +1072,7 @@
             this.uiComboBox5.DataSource = null;
             this.uiComboBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox5.FillColor = System.Drawing.Color.White;
-            this.uiComboBox5.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox5.Font = new System.Drawing.Font("微软雅黑", 10.5F);
             this.uiComboBox5.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox5.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox5.Location = new System.Drawing.Point(99, 38);
@@ -936,7 +1103,7 @@
             this.uiComboBox11.DataSource = null;
             this.uiComboBox11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiComboBox11.FillColor = System.Drawing.Color.White;
-            this.uiComboBox11.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiComboBox11.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiComboBox11.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
             this.uiComboBox11.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiComboBox11.Location = new System.Drawing.Point(99, 5);
@@ -953,18 +1120,21 @@
             // 
             // uiCheckBoxGroup1
             // 
-            this.uiCheckBoxGroup1.BackColor = System.Drawing.Color.White;
+            this.uiCheckBoxGroup1.BackColor = System.Drawing.Color.Transparent;
+            this.uiCheckBoxGroup1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("uiCheckBoxGroup1.BackgroundImage")));
+            this.uiCheckBoxGroup1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.uiCheckBoxGroup1.Controls.Add(this.tableLayoutPanel2);
             this.uiCheckBoxGroup1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiCheckBoxGroup1.Location = new System.Drawing.Point(20, 37);
+            this.uiCheckBoxGroup1.Location = new System.Drawing.Point(19, 37);
             this.uiCheckBoxGroup1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiCheckBoxGroup1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiCheckBoxGroup1.Name = "uiCheckBoxGroup1";
             this.uiCheckBoxGroup1.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
+            this.uiCheckBoxGroup1.Radius = 10;
+            this.uiCheckBoxGroup1.RectSize = 2;
             this.uiCheckBoxGroup1.SelectedIndexes = ((System.Collections.Generic.List<int>)(resources.GetObject("uiCheckBoxGroup1.SelectedIndexes")));
-            this.uiCheckBoxGroup1.Size = new System.Drawing.Size(373, 217);
+            this.uiCheckBoxGroup1.Size = new System.Drawing.Size(360, 217);
             this.uiCheckBoxGroup1.TabIndex = 25;
-            this.uiCheckBoxGroup1.Text = "Ethernet1";
             this.uiCheckBoxGroup1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel2
@@ -1022,7 +1192,7 @@
             // 
             // uiLabel3
             // 
-            this.uiLabel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.uiLabel3.BackColor = System.Drawing.Color.Transparent;
             this.uiLabel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiLabel3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -1035,7 +1205,7 @@
             // 
             // uiLabel5
             // 
-            this.uiLabel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.uiLabel5.BackColor = System.Drawing.Color.Transparent;
             this.uiLabel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiLabel5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -1048,7 +1218,7 @@
             // 
             // uiLabel8
             // 
-            this.uiLabel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
+            this.uiLabel8.BackColor = System.Drawing.Color.Transparent;
             this.uiLabel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiLabel8.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabel8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
@@ -1075,142 +1245,62 @@
             this.uiTextBox9.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             this.uiTextBox9.Watermark = "";
             // 
-            // uiButton4
-            // 
-            this.uiButton4.BackColor = System.Drawing.Color.White;
-            this.uiButton4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton4.Location = new System.Drawing.Point(989, 285);
-            this.uiButton4.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton4.Name = "uiButton4";
-            this.uiButton4.Radius = 10;
-            this.uiButton4.Size = new System.Drawing.Size(60, 24);
-            this.uiButton4.TabIndex = 23;
-            this.uiButton4.Text = "确定";
-            this.uiButton4.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton4.Click += new System.EventHandler(this.uiButton4_Click);
-            // 
             // uiButton5
             // 
-            this.uiButton5.BackColor = System.Drawing.Color.White;
+            this.uiButton5.BackColor = System.Drawing.Color.Transparent;
             this.uiButton5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton5.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.uiButton5.FillColorGradient = true;
+            this.uiButton5.FillColorGradientDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.uiButton5.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.uiButton5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton5.Location = new System.Drawing.Point(671, 285);
+            this.uiButton5.Location = new System.Drawing.Point(628, 260);
             this.uiButton5.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton5.Name = "uiButton5";
             this.uiButton5.Radius = 10;
-            this.uiButton5.Size = new System.Drawing.Size(60, 24);
+            this.uiButton5.RadiusSides = Sunny.UI.UICornerRadiusSides.None;
+            this.uiButton5.Size = new System.Drawing.Size(80, 35);
             this.uiButton5.TabIndex = 21;
             this.uiButton5.Text = "确定";
             this.uiButton5.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiButton5.Click += new System.EventHandler(this.uiButton5_Click);
             // 
-            // uiButton3
+            // uiLabel9
             // 
-            this.uiButton3.BackColor = System.Drawing.Color.White;
-            this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton3.Location = new System.Drawing.Point(333, 285);
-            this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton3.Name = "uiButton3";
-            this.uiButton3.Radius = 10;
-            this.uiButton3.Size = new System.Drawing.Size(60, 24);
-            this.uiButton3.TabIndex = 20;
-            this.uiButton3.Text = "确定";
-            this.uiButton3.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton3.Click += new System.EventHandler(this.uiButton3_Click);
+            this.uiLabel9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel9.Location = new System.Drawing.Point(428, 15);
+            this.uiLabel9.Name = "uiLabel9";
+            this.uiLabel9.Size = new System.Drawing.Size(62, 28);
+            this.uiLabel9.TabIndex = 28;
+            this.uiLabel9.Text = "COM1";
             // 
-            // uiLabel1
+            // uiLabel14
             // 
-            this.uiLabel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
-            this.uiLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiLabel1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel1.Location = new System.Drawing.Point(2, 627);
-            this.uiLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.uiLabel1.Name = "uiLabel1";
-            this.uiLabel1.Size = new System.Drawing.Size(1085, 20);
-            this.uiLabel1.TabIndex = 6;
-            this.uiLabel1.Text = "信息显示";
-            // 
-            // uiLabel2
-            // 
-            this.uiLabel2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.uiLabel2.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel2.Location = new System.Drawing.Point(3, 139);
-            this.uiLabel2.Name = "uiLabel2";
-            this.uiLabel2.Size = new System.Drawing.Size(89, 23);
-            this.uiLabel2.TabIndex = 8;
-            this.uiLabel2.Text = "断帧时间";
-            // 
-            // uiComboBox10
-            // 
-            this.uiComboBox10.DataSource = null;
-            this.uiComboBox10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiComboBox10.FillColor = System.Drawing.Color.White;
-            this.uiComboBox10.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiComboBox10.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
-            this.uiComboBox10.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.uiComboBox10.Location = new System.Drawing.Point(99, 137);
-            this.uiComboBox10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiComboBox10.MinimumSize = new System.Drawing.Size(63, 0);
-            this.uiComboBox10.Name = "uiComboBox10";
-            this.uiComboBox10.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
-            this.uiComboBox10.Radius = 1;
-            this.uiComboBox10.Size = new System.Drawing.Size(137, 27);
-            this.uiComboBox10.SymbolSize = 24;
-            this.uiComboBox10.TabIndex = 9;
-            this.uiComboBox10.Text = "uiComboBox10";
-            this.uiComboBox10.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiComboBox10.Watermark = "";
-            // 
-            // uiLabel6
-            // 
-            this.uiLabel6.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.uiLabel6.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel6.Location = new System.Drawing.Point(3, 139);
-            this.uiLabel6.Name = "uiLabel6";
-            this.uiLabel6.Size = new System.Drawing.Size(91, 23);
-            this.uiLabel6.TabIndex = 8;
-            this.uiLabel6.Text = "断帧时间";
-            // 
-            // uiComboBox12
-            // 
-            this.uiComboBox12.DataSource = null;
-            this.uiComboBox12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiComboBox12.FillColor = System.Drawing.Color.White;
-            this.uiComboBox12.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiComboBox12.ItemHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
-            this.uiComboBox12.ItemSelectForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
-            this.uiComboBox12.Location = new System.Drawing.Point(101, 137);
-            this.uiComboBox12.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiComboBox12.MinimumSize = new System.Drawing.Size(63, 0);
-            this.uiComboBox12.Name = "uiComboBox12";
-            this.uiComboBox12.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
-            this.uiComboBox12.Radius = 1;
-            this.uiComboBox12.Size = new System.Drawing.Size(135, 27);
-            this.uiComboBox12.SymbolSize = 24;
-            this.uiComboBox12.TabIndex = 9;
-            this.uiComboBox12.Text = "uiComboBox12";
-            this.uiComboBox12.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiComboBox12.Watermark = "";
+            this.uiLabel14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel14.Location = new System.Drawing.Point(34, 15);
+            this.uiLabel14.Name = "uiLabel14";
+            this.uiLabel14.Size = new System.Drawing.Size(96, 28);
+            this.uiLabel14.TabIndex = 29;
+            this.uiLabel14.Text = "Ethernet1";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1089, 647);
+            this.AutoSize = true;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(1062, 580);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "网关配置";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.uiGroupBox1.ResumeLayout(false);
             this.uiCheckBoxGroup6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.uiDataGridView1)).EndInit();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.uiGroupBox2.ResumeLayout(false);
             this.uiCheckBoxGroup3.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
@@ -1261,15 +1351,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn20;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn21;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private Sunny.UI.UIGroupBox uiGroupBox2;
         private Sunny.UI.UILabel uiLabel1;
-        private Sunny.UI.UIButton uiButton3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private Sunny.UI.UILabel uiLabel3;
-        private Sunny.UI.UILabel uiLabel5;
-        private Sunny.UI.UILabel uiLabel8;
+        private Sunny.UI.UIButton uiButton2;
+        private Sunny.UI.UIButton uiButton6;
+        private Sunny.UI.UIGroupBox uiGroupBox2;
+        private Sunny.UI.UICheckBoxGroup uiCheckBoxGroup3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private Sunny.UI.UIComboBox uiComboBox12;
+        private Sunny.UI.UILabel uiLabel6;
         private Sunny.UI.UILabel uiLabel10;
         private Sunny.UI.UILabel uiLabel11;
         private Sunny.UI.UILabel uiLabel12;
@@ -1278,8 +1367,12 @@
         private Sunny.UI.UIComboBox uiComboBox8;
         private Sunny.UI.UILabel uiLabel13;
         private Sunny.UI.UIComboBox uiComboBox9;
+        private Sunny.UI.UIButton uiButton3;
         private Sunny.UI.UIButton uiButton4;
+        private Sunny.UI.UICheckBoxGroup uiCheckBoxGroup2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private Sunny.UI.UIComboBox uiComboBox10;
+        private Sunny.UI.UILabel uiLabel2;
         private Sunny.UI.UILabel uiLabel15;
         private Sunny.UI.UILabel uiLabel16;
         private Sunny.UI.UILabel uiLabel17;
@@ -1288,19 +1381,18 @@
         private Sunny.UI.UIComboBox uiComboBox5;
         private Sunny.UI.UILabel uiLabel19;
         private Sunny.UI.UIComboBox uiComboBox11;
-        private Sunny.UI.UIButton uiButton5;
         private Sunny.UI.UICheckBoxGroup uiCheckBoxGroup1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private Sunny.UI.UITextBox uiTextBox3;
         private Sunny.UI.UITextBox uiTextBox4;
+        private Sunny.UI.UILabel uiLabel3;
+        private Sunny.UI.UILabel uiLabel5;
+        private Sunny.UI.UILabel uiLabel8;
         private Sunny.UI.UITextBox uiTextBox9;
-        private Sunny.UI.UICheckBoxGroup uiCheckBoxGroup3;
-        private Sunny.UI.UICheckBoxGroup uiCheckBoxGroup2;
-        private Sunny.UI.UIButton uiButton2;
-        private Sunny.UI.UIButton uiButton6;
-        private Sunny.UI.UIComboBox uiComboBox12;
-        private Sunny.UI.UILabel uiLabel6;
-        private Sunny.UI.UIComboBox uiComboBox10;
-        private Sunny.UI.UILabel uiLabel2;
+        private Sunny.UI.UIButton uiButton5;
+        private Sunny.UI.UILabel uiLabel7;
+        private Sunny.UI.UILabel uiLabel14;
+        private Sunny.UI.UILabel uiLabel9;
     }
 }
 
