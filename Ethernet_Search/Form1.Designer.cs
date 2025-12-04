@@ -75,8 +75,10 @@
             this.dataGridViewTextBoxColumn21 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.uiLabel1 = new Sunny.UI.UILabel();
             this.uiGroupBox2 = new Sunny.UI.UIGroupBox();
-            this.uiCheckBoxGroup3 = new Sunny.UI.UICheckBoxGroup();
+            this.uiLabel14 = new Sunny.UI.UILabel();
+            this.uiLabel9 = new Sunny.UI.UILabel();
             this.uiLabel7 = new Sunny.UI.UILabel();
+            this.uiCheckBoxGroup3 = new Sunny.UI.UICheckBoxGroup();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.uiComboBox12 = new Sunny.UI.UIComboBox();
             this.uiLabel6 = new Sunny.UI.UILabel();
@@ -111,8 +113,6 @@
             this.uiLabel8 = new Sunny.UI.UILabel();
             this.uiTextBox9 = new Sunny.UI.UITextBox();
             this.uiButton5 = new Sunny.UI.UIButton();
-            this.uiLabel9 = new Sunny.UI.UILabel();
-            this.uiLabel14 = new Sunny.UI.UILabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.uiGroupBox1.SuspendLayout();
             this.uiCheckBoxGroup6.SuspendLayout();
@@ -660,6 +660,36 @@
             this.uiGroupBox2.Text = null;
             this.uiGroupBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // uiLabel14
+            // 
+            this.uiLabel14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel14.Location = new System.Drawing.Point(34, 15);
+            this.uiLabel14.Name = "uiLabel14";
+            this.uiLabel14.Size = new System.Drawing.Size(96, 28);
+            this.uiLabel14.TabIndex = 29;
+            this.uiLabel14.Text = "Ethernet1";
+            // 
+            // uiLabel9
+            // 
+            this.uiLabel9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel9.Location = new System.Drawing.Point(428, 15);
+            this.uiLabel9.Name = "uiLabel9";
+            this.uiLabel9.Size = new System.Drawing.Size(62, 28);
+            this.uiLabel9.TabIndex = 28;
+            this.uiLabel9.Text = "COM1";
+            // 
+            // uiLabel7
+            // 
+            this.uiLabel7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel7.Location = new System.Drawing.Point(761, 15);
+            this.uiLabel7.Name = "uiLabel7";
+            this.uiLabel7.Size = new System.Drawing.Size(62, 28);
+            this.uiLabel7.TabIndex = 15;
+            this.uiLabel7.Text = "COM2";
+            // 
             // uiCheckBoxGroup3
             // 
             this.uiCheckBoxGroup3.BackColor = System.Drawing.Color.Transparent;
@@ -680,16 +710,6 @@
             this.uiCheckBoxGroup3.TabIndex = 27;
             this.uiCheckBoxGroup3.Text = null;
             this.uiCheckBoxGroup3.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // uiLabel7
-            // 
-            this.uiLabel7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel7.Location = new System.Drawing.Point(761, 15);
-            this.uiLabel7.Name = "uiLabel7";
-            this.uiLabel7.Size = new System.Drawing.Size(62, 28);
-            this.uiLabel7.TabIndex = 15;
-            this.uiLabel7.Text = "COM2";
             // 
             // tableLayoutPanel3
             // 
@@ -932,6 +952,7 @@
             this.uiCheckBoxGroup2.SelectedIndexes = ((System.Collections.Generic.List<int>)(resources.GetObject("uiCheckBoxGroup2.SelectedIndexes")));
             this.uiCheckBoxGroup2.Size = new System.Drawing.Size(320, 217);
             this.uiCheckBoxGroup2.TabIndex = 26;
+            this.uiCheckBoxGroup2.Text = null;
             this.uiCheckBoxGroup2.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel4
@@ -1135,6 +1156,7 @@
             this.uiCheckBoxGroup1.SelectedIndexes = ((System.Collections.Generic.List<int>)(resources.GetObject("uiCheckBoxGroup1.SelectedIndexes")));
             this.uiCheckBoxGroup1.Size = new System.Drawing.Size(360, 217);
             this.uiCheckBoxGroup1.TabIndex = 25;
+            this.uiCheckBoxGroup1.Text = null;
             this.uiCheckBoxGroup1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel2
@@ -1264,26 +1286,6 @@
             this.uiButton5.Text = "确定";
             this.uiButton5.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiButton5.Click += new System.EventHandler(this.uiButton5_Click);
-            // 
-            // uiLabel9
-            // 
-            this.uiLabel9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel9.Location = new System.Drawing.Point(428, 15);
-            this.uiLabel9.Name = "uiLabel9";
-            this.uiLabel9.Size = new System.Drawing.Size(62, 28);
-            this.uiLabel9.TabIndex = 28;
-            this.uiLabel9.Text = "COM1";
-            // 
-            // uiLabel14
-            // 
-            this.uiLabel14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel14.Location = new System.Drawing.Point(34, 15);
-            this.uiLabel14.Name = "uiLabel14";
-            this.uiLabel14.Size = new System.Drawing.Size(96, 28);
-            this.uiLabel14.TabIndex = 29;
-            this.uiLabel14.Text = "Ethernet1";
             // 
             // Form1
             // 
