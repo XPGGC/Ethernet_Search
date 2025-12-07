@@ -106,6 +106,10 @@
             this.dataGridViewTextBoxColumn21 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.uiButton6 = new Sunny.UI.UIButton();
             this.uiButton7 = new Sunny.UI.UIButton();
+            this.uiLabel1 = new Sunny.UI.UILabel();
+            this.uiLabel20 = new Sunny.UI.UILabel();
+            this.uiTextBox1 = new Sunny.UI.UITextBox();
+            this.uiTextBox2 = new Sunny.UI.UITextBox();
             this.uiCheckBoxGroup3.SuspendLayout();
             this.uiCheckBoxGroup2.SuspendLayout();
             this.uiCheckBoxGroup1.SuspendLayout();
@@ -869,6 +873,10 @@
             // 
             this.uiCheckBoxGroup1.BackColor = System.Drawing.Color.Transparent;
             this.uiCheckBoxGroup1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.uiCheckBoxGroup1.Controls.Add(this.uiTextBox2);
+            this.uiCheckBoxGroup1.Controls.Add(this.uiTextBox1);
+            this.uiCheckBoxGroup1.Controls.Add(this.uiLabel20);
+            this.uiCheckBoxGroup1.Controls.Add(this.uiLabel1);
             this.uiCheckBoxGroup1.Controls.Add(this.uiTextBox9);
             this.uiCheckBoxGroup1.Controls.Add(this.uiTextBox4);
             this.uiCheckBoxGroup1.Controls.Add(this.uiTextBox3);
@@ -1177,6 +1185,62 @@
             this.uiButton7.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiButton7.Click += new System.EventHandler(this.uiButton7_Click);
             // 
+            // uiLabel1
+            // 
+            this.uiLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel1.Location = new System.Drawing.Point(14, 215);
+            this.uiLabel1.Name = "uiLabel1";
+            this.uiLabel1.Size = new System.Drawing.Size(91, 32);
+            this.uiLabel1.TabIndex = 31;
+            this.uiLabel1.Text = "COM2端口";
+            this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // uiLabel20
+            // 
+            this.uiLabel20.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel20.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel20.Location = new System.Drawing.Point(14, 175);
+            this.uiLabel20.Name = "uiLabel20";
+            this.uiLabel20.Size = new System.Drawing.Size(91, 32);
+            this.uiLabel20.TabIndex = 32;
+            this.uiLabel20.Text = "COM1端口";
+            this.uiLabel20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // uiTextBox1
+            // 
+            this.uiTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.uiTextBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiTextBox1.Location = new System.Drawing.Point(105, 175);
+            this.uiTextBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.uiTextBox1.MinimumSize = new System.Drawing.Size(1, 16);
+            this.uiTextBox1.Name = "uiTextBox1";
+            this.uiTextBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.uiTextBox1.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(223)))), ((int)(((byte)(230)))));
+            this.uiTextBox1.ShowText = false;
+            this.uiTextBox1.Size = new System.Drawing.Size(217, 32);
+            this.uiTextBox1.TabIndex = 33;
+            this.uiTextBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiTextBox1.Watermark = "";
+            // 
+            // uiTextBox2
+            // 
+            this.uiTextBox2.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.uiTextBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiTextBox2.Location = new System.Drawing.Point(105, 215);
+            this.uiTextBox2.Margin = new System.Windows.Forms.Padding(5);
+            this.uiTextBox2.MinimumSize = new System.Drawing.Size(1, 16);
+            this.uiTextBox2.Name = "uiTextBox2";
+            this.uiTextBox2.Padding = new System.Windows.Forms.Padding(5);
+            this.uiTextBox2.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(223)))), ((int)(((byte)(230)))));
+            this.uiTextBox2.ShowText = false;
+            this.uiTextBox2.Size = new System.Drawing.Size(217, 32);
+            this.uiTextBox2.TabIndex = 34;
+            this.uiTextBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiTextBox2.Watermark = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1282,6 +1346,10 @@
         private Sunny.UI.UIButton uiButton6;
         private Sunny.UI.UIButton uiButton7;
         private Sunny.UI.UIDataGridView uiDataGridView1;
+        private Sunny.UI.UITextBox uiTextBox2;
+        private Sunny.UI.UITextBox uiTextBox1;
+        private Sunny.UI.UILabel uiLabel20;
+        private Sunny.UI.UILabel uiLabel1;
     }
 }
 

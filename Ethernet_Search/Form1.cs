@@ -33,7 +33,6 @@ namespace Ethernet_Search
             Ethernet,  // 网卡连接
         }
 
-        private ConnectionMode currentConnectionMode = ConnectionMode.None;
         private string targetDeviceIP = "";  // 目标设备IP
 
         public string jsonData = ""; // 要发送的JSON数据
@@ -566,11 +565,16 @@ namespace Ethernet_Search
             ip1 = uiTextBox3.Text;
             subnetMask1 = uiTextBox4.Text;
             gateway1 = uiTextBox9.Text;
+            int com1 = int.Parse(uiTextBox1.Text);
+            int com2 = int.Parse(uiTextBox2.Text);
+
+            if (com1 < 0 | com1 > 65535) { MessageBox.Show("COM1端口需要设置在0~65535之间"); return; }
+            if (com2 < 0 | com2 > 65535) { MessageBox.Show("COM2端口需要设置在0~65535之间"); return; }
 
             System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(@"\b((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))\b");
-            if (rx.IsMatch(ip1) == false) { MessageBox.Show("IP地址不合法，请重新输入"); uiTextBox3.Text = ""; return; }
-            if (rx.IsMatch(subnetMask1) == false) { MessageBox.Show("子网掩码地址不合法，请重新输入"); uiTextBox4.Text = ""; return; }
-            if (rx.IsMatch(gateway1) == false) { MessageBox.Show("默认地址不合法，请重新输入"); uiTextBox9.Text = ""; return; }
+            if (rx.IsMatch(ip1) == false) { MessageBox.Show("IP地址不合法，请重新输入"); return; }
+            if (rx.IsMatch(subnetMask1) == false) { MessageBox.Show("子网掩码地址不合法，请重新输入"); return; }
+            if (rx.IsMatch(gateway1) == false) { MessageBox.Show("默认地址不合法，请重新输入"); return; }
 
             //将 JSON 字符串解析为 JObject
             JObject jsonObj = JObject.Parse(COMMANDS["修改Ethernet参数"]);
@@ -580,6 +584,9 @@ namespace Ethernet_Search
             if (uiTextBox3.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["ip"] = ip1;
             if (uiTextBox4.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["subnetMask"] = subnetMask1;
             if (uiTextBox9.Text != "") jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["gateway"] = gateway1;
+
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["COM1"] = com1;
+            jsonObj["parameterInfo"]["Ethernet"][0]["interfacePar"]["COM2"] = com2;
 
             //将更新后的 JObject 转回 JSON 字符串
             jsonData = jsonObj.ToString(Formatting.None);
@@ -1100,13 +1107,6 @@ namespace Ethernet_Search
             };
             // 启动按序发送二条指令的序列
             StartSendSequence();
-
-            //uiComboBox2.Text = parityMap[uiComboBox2.Text];
-            //uiComboBox6.Text = parityMap[uiComboBox6.Text];
-
-            //uiComboBox10.Text = frameBreakTimeMap[uiComboBox10.Text];
-            //uiComboBox12.Text = frameBreakTimeMap[uiComboBox12.Text];
-
         }
 
         private void uiDataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
